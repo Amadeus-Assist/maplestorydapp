@@ -1,3 +1,5 @@
+// 引入其他js文件中的函数
+// window是object
 window.resource = new Resource();
 window.music_manager = new MusicManager();
 
@@ -22,20 +24,25 @@ window.monsters_attr = new MonstersAttr().getMonstersAttr();
 
 window.percent = new Percent();
 
+
 function $(id) {
 	return document.getElementById(id);
 }
 
 window.onload = function() {
-	
+	// 开始
 	$("start_btn").onclick = function() {
-		window.switchUI("select");
+		window.switchUI("login");
 	}
 
+	$("login_btn").onclick = function() {
+		window.switchlogin("select","login");
+	}
+	// 帮助
 	$("help_btn").onclick = function() {
 		window.switchUI("help");
 	}
-
+	// 选择角色
 	$("left_img").onclick = function() {
 		start("male");
 	}
@@ -45,12 +52,14 @@ window.onload = function() {
 	}
 	
 	var canvas = $("canvas");
+	//获取作用于画布的API，获取canvas的一些属性
 	var ctx = canvas.getContext("2d");
 		ctx.textAlign = "center";
 		ctx.textBaseLine = "top";
 		ctx.font = "14px 微软雅黑 bold";
 		ctx.fillStyle = "black";
 
+		// 开始载入 - 有百分比
 	this.thread = setInterval(function() {
 		if (window.resource.curr_amount == window.resource.total_amount) {
 			clearInterval(thread);
@@ -69,6 +78,8 @@ window.onload = function() {
 	resource.load();
 }
 
+
+// switchUI的函数定义，
 window.switchUI = function(e_id) {
 	var e = $(e_id);
 	if (e.style.display == "none" || e.style.display == "") {
@@ -77,11 +88,23 @@ window.switchUI = function(e_id) {
 		e.style.display = "none";
 	}
 }
+//loginswitch
+window.switchlogin = function(e_id,last_id) {
+	var e = $(e_id);
+	var login = $(last_id)
+	if (e.style.display == "none" || e.style.display == "") {
+		e.style.display = "block";
+		login.style.display = "none";
 
+	} else {
+		e.style.display = "none";
+	}
+}
+// start函数定义，选择角色
 window.start = function(gender) {
 	document.body.removeChild($("home"));
 	document.body.removeChild($("home_audio"));
-
+	// 选择角色
 	if (gender == "male") {
 		window.PLAYER_OFFSET_Y = 0;
 		window.resource.player = window.resource.male_player;
@@ -90,6 +113,7 @@ window.start = function(gender) {
 		window.resource.player = window.resource.female_player;
 	}
 
+	//移动方式
 	var ctx = $("canvas").getContext("2d");
 		ctx.drawRightImage = function(img, x, y) {
 			ctx.save();
@@ -124,12 +148,13 @@ window.start = function(gender) {
         }  
 };  
   
-
+	//属性
 	var player;
 	var backpack;
 	var ability;
 	var equipment;
 	var ui;
+
 	
 	initSingle();
 
@@ -154,6 +179,7 @@ window.start = function(gender) {
 		var bg_data = {x: 0, y: 0, res: window.resource.bg["bg"][map_basic_data.bg]};
 
 		var scene_obj = {};
+			// 这里有backpack，equipment信息
 			scene_obj.music_src = map_basic_data.music_src;
 			scene_obj.backpack = backpack;
 			scene_obj.ability = ability;
