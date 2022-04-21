@@ -14,16 +14,20 @@
 		.home {position: absolute; border:1px solid #000; width: 800px; height: 600px; cursor: url("bg/cursor.png"), auto;z-index: 2;}
 		.version{position: absolute;right: 100px;top: 5px;font-weight: bold;font-size: 12px;display: none;}
 
-		button {position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none;}
+		/*button {position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none;}*/
 		button:hover{text-shadow: 0px 0px 5px red;}
-		.select-btn{bottom: 150px;right: 100px;}
-		.help-btn{bottom: 120px;right: 100px;}
+		.select-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none; bottom: 150px;right: 100px;}
+		.help-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none;bottom: 120px;right: 100px;}
+		.login-btn{margin-right:10px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
+		.signup-btn{margin-left:10px;background:white; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:100px;text-align:center}
+		.logtext{text-align:center;margin:10px;}
 
 		.frame{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
 		.select-frame{top:50px;}
+		.frame-login{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
 		.text{font-weight: bold;font-size: 14px;text-shadow: 0px 0px 5px red;color:yellow;text-align: center;}
 		.character{width: 320px;margin: 10px auto;}
-		img{width: 60px; height: 96;border-radius: 10px;padding: 30px;background:rgba(0, 0, 0, 0.6);box-shadow: 0 0 10px #000;transition: all 0.3s;margin-bottom:20px;}
+		img{width: 60px; height: 96px;border-radius: 10px;padding: 30px;background:rgba(0, 0, 0, 0.6);box-shadow: 0 0 10px #000;transition: all 0.3s;margin-bottom:20px;}
 		img:hover{box-shadow: 0 0 20px red;background:rgba(0, 0, 0, 0.8);}
 		.left-img{float:left;}
 		.right-img{float: right;}
@@ -51,9 +55,25 @@
 
 	<body onselectstart="return false;">
 		<audio id="home_audio" src="music/home.mp3" preload="true" loop="true"></audio>
+		<!--canvas - 鼠标图标可以移动的范围-->
 		<canvas id="canvas" width="800" height="600"></canvas>
 		<div class="home" id="home">
 			<div class="version" id="version">Ver.20160215</div>
+			<!--要在这里加一个登陆界面-->
+			<div class = "frame-login select-frame" id = "login">
+				<div class="text">请登录</div>
+				<fieldset>
+					<form method = "get">
+						<p class="logtext">账号：<input type = "text" name ="name"></p>
+						<p class="logtext">密码：<input type = "text" name = "name"></p>
+					</form>
+				</fieldset>
+				<div align = "center">
+					<button class="login-btn" id = "login_btn">登录</button>
+					<button class="signup-btn" id ="signup_btn">注册</button>
+				</div>
+
+			</div>
 			<!--select character-->
 			<div class="frame select-frame" id="select">
 				<div class="text">请选择角色</div>
