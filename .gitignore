@@ -129,3 +129,4 @@ dmypy.json
 
 # smart contract related
 smart_contract/artifacts
+smart_contract/cache
