@@ -50,6 +50,10 @@ window.onload = function() {
 	$("right_img").onclick = function() {
 		start("female");
 	}
+
+	$("save_btn").onclick = function() {
+		save_data();
+	}
 	
 	var canvas = $("canvas");
 	//获取作用于画布的API，获取canvas的一些属性
@@ -100,8 +104,15 @@ window.switchlogin = function(e_id,last_id) {
 		e.style.display = "none";
 	}
 }
+
+window.save_data = function() {
+	//TODO: save data to the back end
+}
+
 // start函数定义，选择角色
 window.start = function(gender) {
+	var e = $("save_btn")
+	e.style.display = "block"
 	document.body.removeChild($("home"));
 	document.body.removeChild($("home_audio"));
 	// 选择角色
@@ -200,6 +211,7 @@ window.start = function(gender) {
 	}
 
 	function initSingle() {
+		// TODO: fetch backpack data from backend
 		backpack = new Backpack();
 		ability = new Ability();
 		equipment = new Equipment();
@@ -219,3 +231,7 @@ window.start = function(gender) {
 		player = new Player(player_data);
 	}
 }
+
+window.addEventListener('beforeunload', (event) => {
+    event.returnValue = 'You have unfinished changes!';
+});

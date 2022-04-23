@@ -9,8 +9,7 @@
 
 		*{margin: 0;}
 		body{-moz-user-select:none;}
-		#canvas{position: absolute;border: 1px solid #000;cursor: url("bg/cursor.png"), auto;z-index: 1;}
-		
+		#canvas{position: absolute;border: 1px solid #000;cursor: url("bg/cursor.png"), auto;z-index: -1;}
 		.home {position: absolute; border:1px solid #000; width: 800px; height: 600px; cursor: url("bg/cursor.png"), auto;z-index: 2;}
 		.version{position: absolute;right: 100px;top: 5px;font-weight: bold;font-size: 12px;display: none;}
 
@@ -20,6 +19,7 @@
 		.help-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none;bottom: 120px;right: 100px;}
 		.login-btn{margin-right:10px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
 		.signup-btn{margin-left:10px;background:white; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:100px;text-align:center}
+		.save-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 20px;right: 150px;}
 		.logtext{text-align:center;margin:10px;}
 
 		.frame{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
@@ -57,6 +57,7 @@
 		<audio id="home_audio" src="music/home.mp3" preload="true" loop="true"></audio>
 		<!--canvas - 鼠标图标可以移动的范围-->
 		<canvas id="canvas" width="800" height="600"></canvas>
+		<button class="save-btn" id="save_btn">Save Data</button>
 		<div class="home" id="home">
 			<div class="version" id="version">Ver.20160215</div>
 			<!--要在这里加一个登陆界面-->
