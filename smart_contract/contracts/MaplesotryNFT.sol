@@ -43,7 +43,6 @@ contract MaplestoryDappNFT is ERC721, Ownable {
 
     // the name and symbol for the NFT
     constructor() public ERC721("MaplestoryDappNFT", "MSD") {
-        paused = true;
         operatorAddress = msg.sender;
     }
 
@@ -51,8 +50,8 @@ contract MaplestoryDappNFT is ERC721, Ownable {
     // receiver takes a type of address. This is the wallet address of the user that should receive the NFT minted using the smart contract
     // tokenURI takes a string that contains metadata about the NFT
 
-    function createWeaponNFT(address receiver, string memory weapon_type, string memory name, uint256 memory
-        drop_time, uint256 memory attack)
+    function createWeaponNFT(address receiver, string memory weapon_type, string memory name, uint256 drop_time,
+        uint256 attack)
     public onlyOperator
     returns (uint256)
     {
@@ -68,7 +67,8 @@ contract MaplestoryDappNFT is ERC721, Ownable {
         attack : uint32(attack)
         });
 
-        uint256 newWeaponId = weapons.push(_weapon) - 1;
+        weapons.push(_weapon);
+        uint256 newWeaponId = weapons.length - 1;
         require(newWeaponId == uint256(uint32(newWeaponId)));
 
         //        uint256 newItemId = _tokenIds.current();
@@ -83,7 +83,7 @@ contract MaplestoryDappNFT is ERC721, Ownable {
         return weapons.length - 1;
     }
 
-    function weaponsOfOwner(address _owner) external view returns (uint256[] ownerTokens) {
+    function weaponsOfOwner(address _owner) external view returns (uint256[] memory ownerTokens) {
         uint256 weaponsCount = balanceOf(_owner);
 
         if (weaponsCount == 0) {
@@ -106,8 +106,8 @@ contract MaplestoryDappNFT is ERC721, Ownable {
     }
 
     function getWeapon(uint256 _id) external view returns (
-        string weapon_type,
-        string name,
+        string memory weapon_type,
+        string memory name,
         uint64 drop_time,
         uint32 attack
     ){
