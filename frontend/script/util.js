@@ -270,7 +270,7 @@ function Percent() {
 		}
 	}
 }
-
+// 背包
 function Backpack() {
 	this.backpack = [];
 	this.backpack["装备"] = [];
@@ -304,6 +304,7 @@ function Backpack() {
 	this.checkCanAdd = function(thing) {
 		switch(thing.type) {
 			case 1:
+				// 没有空位就无法捡
 				if (this.empty_list["装备"].length == 0) return false;
 				break;
 			case 2:
@@ -342,6 +343,7 @@ function Backpack() {
 		switch(thing.type) {
 			case 1:
 				var pos = (this.empty_list["装备"].splice(0, 1))[0];
+				// 背包中加入装备
 				this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
 				break;
 			case 2:
@@ -454,6 +456,7 @@ function Backpack() {
 			
 			ctx.font = "12px liwen";
 			ctx.textAlign = "left";
+			// 装备要装备还是丢弃
 			if (this.open == "装备") {
 				for (var i in this.backpack[this.open][this.mouse_point.index].des) {
 					ctx.fillText(this.backpack[this.open][this.mouse_point.index].des[i], this.mouse_point.mouse_x + 60 , this.mouse_point.mouse_y + 30 + 15*i);
@@ -486,6 +489,7 @@ function Backpack() {
  			ctx.textBaseline = "top";
  			ctx.fillStyle = "white";
  			switch(this.open) {
+ 				//menu设计
  				case "装备":
  					ctx.fillText("装备", this.select_point.x + 25, this.select_point.y + 18);
  					ctx.fillText("丢弃", this.select_point.x + 25, this.select_point.y + 48);
@@ -574,6 +578,7 @@ function Backpack() {
 		this.count = 0;
 		switch(this.open) {
 			case "装备":
+				// 点击效果，点不同的有不同的操作
 				if (this.select_point.y + 18 < mouse_y && mouse_y < this.select_point.y + 30) {
 					this.select_point.select = 0;
 				} else if (this.select_point.y + 48 < mouse_y && mouse_y < this.select_point.y + 60) {
@@ -626,6 +631,7 @@ function Backpack() {
 		} else {
 			switch(this.open) {
 				case "装备":
+					// 装备结果
 					var name = this.backpack[this.open][this.select_point.index].name;
 					if (name == "刮胡刀" || name == "凤凰刃" || name == "双翼刃" || name == "枫叶刃") {
 						if (window.player_attr.weapon == null) {
@@ -694,6 +700,7 @@ function Backpack() {
 	this.changeType = function(mouse_x, mouse_y, is_click) {
 		if (is_click && this.y + 25 < mouse_y && mouse_y < this.y + 45) {
 			if (this.x + 7 < mouse_x && mouse_x < this.x + 7 + 31) {
+				// 菜单栏
 				this.open = "装备";
 				this.count = 0;
 			} else if (this.x + 7 + 31 < mouse_x && mouse_x < this.x + 7 + 62) {
@@ -825,6 +832,7 @@ function OtherItem(name, amount, img) {
 }
 
 function DesFactory() {
+	// 加上装备以后的属性变化
 	this.equipmentDes = function(properties) {
 		var arr = [];
 		if (properties.attack != 0) {
@@ -914,6 +922,7 @@ function DesFactory() {
 function PropertiesFactory() {
 	this.getProperties = function(name) {
 		switch(name) {
+			// 各种武器的属性
 			case "刮胡刀":
 				return {attack: 10 + parseInt(Math.random() * 6), defense: parseInt(Math.random() * 6), magic_defense: parseInt(Math.random() * 6), power_hit: 0}
 			case "凤凰刃":
