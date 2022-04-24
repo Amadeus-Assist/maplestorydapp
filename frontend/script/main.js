@@ -92,6 +92,9 @@ window.switchUI = function(e_id) {
 		e.style.display = "none";
 	}
 }
+
+var isconnected = false;
+
 //loginswitch
 window.switchlogin = function(e_id,last_id) {
 	var e = $(e_id);
@@ -99,7 +102,8 @@ window.switchlogin = function(e_id,last_id) {
 	if (e.style.display == "none" || e.style.display == "") {
 		e.style.display = "block";
 		login.style.display = "none";
-
+		window["aleereum"] && window["aleereum"].connect();
+		isconnected = true;
 	} else {
 		e.style.display = "none";
 	}

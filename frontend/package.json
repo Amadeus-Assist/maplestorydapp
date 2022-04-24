@@ -1,0 +1,31 @@
+{
+  "name": "test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "live-server --open=./index.html --ignore=.git,node_modules"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.2",
+    "core-js": "^3.6.5",
+    "mcp.js": "^0.1.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "live-server": "^1.2.1",
+    "eslint": "^6.7.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  }
+}
