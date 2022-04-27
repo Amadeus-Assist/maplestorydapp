@@ -14,6 +14,8 @@ contract MaplestoryDappNFT is ERC721 {
     Equipment[] equipments;
     address payable public operatorAddress;
     mapping(address => uint256) deposit;
+    mapping(uint256 => OnSell) tokenIdToOnSell;
+    uint256 totalOnSell;
     //    bool public paused = false;
     //    mapping(address => uint256) ownershipWeaponCount;
     //    mapping(uint256 => address) weaponIndexToOwner;
@@ -25,6 +27,11 @@ contract MaplestoryDappNFT is ERC721 {
         uint32 magic_defense;
         uint32 power_hit;
         uint32 drop_time;
+    }
+
+    struct OnSell{
+        address seller;
+        uint128 price;
     }
 
     // @dev Access modifier for operator-only functionality
@@ -117,7 +124,8 @@ contract MaplestoryDappNFT is ERC721 {
         uint32 defense,
         uint32 magic_defense,
         uint32 power_hit,
-        uint32 drop_time
+        uint32 drop_time,
+        bool onSell
     ){
         Equipment storage equipment = equipments[_id];
         name = equipment.name;
@@ -126,19 +134,85 @@ contract MaplestoryDappNFT is ERC721 {
         magic_defense = equipment.magic_defense;
         power_hit = equipment.power_hit;
         drop_time = equipment.drop_time;
+        onSell = tokenIdToOnSell[_id].seller != address(0);
     }
 
-    event successDeposit(string transactionId);
+    event SuccessDeposit(string transactionId, uint256 amount, address receiver, address sender);
 
     function depositMoney(address _receiver, string memory transactionId) payable public {
         deposit[_receiver] += msg.value;
         require(operatorAddress.send(msg.value));
-        emit successDeposit(transactionId);
+        emit SuccessDeposit(transactionId, msg.value, _receiver, msg.sender);
     }
 
     function getDeposit(address _owner) external view returns(uint256){
         return deposit[_owner];
     }
 
+    event PlaceOnMarket(string transactionId, uint256 tokenId, uint256 price, address seller);
+    event EquipmentSoldOut(string transactionId, uint256 tokenId, uint256 price, address seller, address buyer);
+    event CancelOnSell(string transactionId, uint256 tokenId, uint256 price, address seller);
 
+    function sellEquipment(uint256 _id, uint256 price, string memory transactionId) public {
+        require(price == uint256(uint128(price)));
+        require(tokenIdToOnSell[_id].seller == address(0), "equipment already on sell");
+        require(ownerOf(_id) == msg.sender, "only owner can sell his equipment");
+
+        OnSell memory _newOnSell = OnSell({
+        seller : msg.sender,
+        price : uint128(price)
+        });
+        tokenIdToOnSell[_id] = _newOnSell;
+        totalOnSell++;
+        emit PlaceOnMarket(transactionId, _id, price, msg.sender);
+    }
+
+    function purchaseEquipment(uint256 _id, string memory transactionId) payable public {
+        require(msg.value == uint256(uint128(msg.value)));
+        require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
+        require(msg.value >= tokenIdToOnSell[_id].price, "insufficient money");
+
+        uint128 price = tokenIdToOnSell[_id].price;
+        address payable seller = payable(tokenIdToOnSell[_id].seller);
+        address payable buyer = payable(msg.sender);
+        uint128 excessMoney = uint128(msg.value) - price;
+
+        require(seller.send(price));
+        require(buyer.send(excessMoney));
+        _safeTransfer(seller, msg.sender, _id, "");
+        delete tokenIdToOnSell[_id];
+        totalOnSell--;
+
+        emit EquipmentSoldOut(transactionId, _id, price, seller, msg.sender);
+    }
+
+    function cancelOnSell(uint256 _id, string memory transactionId) public {
+        require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
+        require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
+
+        uint128 price = tokenIdToOnSell[_id].price;
+        delete tokenIdToOnSell[_id];
+        totalOnSell--;
+        emit CancelOnSell(transactionId, _id, price, msg.sender);
+    }
+
+    function allOnSellEquipments() external view returns (uint256[] memory onSellTokens){
+        if (totalOnSell == 0) {
+            return new uint256[](0);
+        } else {
+            uint256[] memory result = new uint256[](totalOnSell);
+            uint256 totalEquipment = totalSupply();
+            uint256 resultIndex = 0;
+
+            uint256 equipmentId;
+
+            for (equipmentId = 1; equipmentId <= totalEquipment; equipmentId++) {
+                if (tokenIdToOnSell[equipmentId].seller != address(0)) {
+                    result[resultIndex] = equipmentId;
+                    resultIndex++;
+                }
+            }
+            return result;
+        }
+    }
 }
