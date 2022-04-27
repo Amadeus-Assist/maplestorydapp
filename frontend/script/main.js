@@ -34,9 +34,16 @@ window.onload = function() {
 	$("start_btn").onclick = function() {
 		window.switchUI("login");
 	}
-
+	//log in button
 	$("login_btn").onclick = function() {
 		window.switchlogin("select","login");
+	}
+	// sign up button
+	$("signup_btn").onclick = function() {
+		window.switchlogin("signup","login");
+	}
+	$("login_btn2").onclick = function() {
+		window.switchlogin("select","signup");
 	}
 	// 帮助
 	$("help_btn").onclick = function() {

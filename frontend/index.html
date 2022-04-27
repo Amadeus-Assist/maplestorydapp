@@ -20,6 +20,7 @@
 		.help-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: transparent;border: none;cursor: url("bg/cursor.png"), auto;display: none;bottom: 120px;right: 100px;}
 		.login-btn{margin-right:10px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
 		.signup-btn{margin-left:10px;background:white; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:100px;text-align:center}
+		.login-btn2{margin-right:300px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
 		.logtext{text-align:center;margin:10px;}
 
 		.frame{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
@@ -61,22 +62,36 @@
 			<div class="version" id="version">Ver.20160215</div>
 			<!--要在这里加一个登陆界面-->
 			<div class = "frame-login select-frame" id = "login">
-				<div class="text">请登录</div>
+				<div class="text">Please Log In</div>
 				<fieldset>
 					<form method = "get">
-						<p class="logtext">账号：<input type = "text" name ="name"></p>
-						<p class="logtext">密码：<input type = "text" name = "name"></p>
+						<p class="logtext">User name: <input type = "text" name ="name"></p>
+						<p class="logtext">Password: <input type = "text" name = "name"></p>
+						<p class="logtext">Wallet Address: <input type = "text" name = "name"></p>
 					</form>
 				</fieldset>
 				<div align = "center">
-					<button class="login-btn" id = "login_btn">登录</button>
-					<button class="signup-btn" id ="signup_btn">注册</button>
+					<button class="login-btn" id = "login_btn">Log In</button>
+					<button class="signup-btn" id ="signup_btn">Sign Up</button>
 				</div>
-
+			</div>
+			<!-- sign up -->
+			<div class = "frame-login select-frame" id = "signup">
+				<div class="text">Sign Up</div>
+				<fieldset>
+					<form method = "get">
+						<p class="logtext">User name: <input type = "text" name ="name"></p>
+						<p class="logtext">Password: <input type = "text" name = "name"></p>
+						<p class="logtext">Wallet Address: <input type = "text" name = "name"></p>
+					</form>
+				</fieldset>
+				<div align = "center">
+					<button class="login-btn" id = "login_btn2">Log In</button>
+				</div>
 			</div>
 			<!--select character-->
 			<div class="frame select-frame" id="select">
-				<div class="text">请选择角色</div>
+				<div class="text">Please Choose Gender</div>
 				<div class="character">
 					<img class="left-img" id="left_img" src="bg/male.png"/>
 					<img class="right-img" id="right_img" src="bg/female.png" onclick="start('female')"/>
