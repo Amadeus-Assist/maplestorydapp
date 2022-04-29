@@ -24,6 +24,11 @@ window.monsters_attr = new MonstersAttr().getMonstersAttr();
 
 window.percent = new Percent();
 
+// global user info, used for initialization
+var oldhp;
+var oldmp;
+var oldexp;
+var oldbackpack;
 
 function $(id) {
 	return document.getElementById(id);
@@ -36,6 +41,25 @@ window.onload = function() {
 	}
 	//log in button
 	$("login_btn").onclick = function() {
+		var username = document.getElementById("username").value;
+		var password = document.getElementById("password").value;
+		var xhr = new XMLHttpRequest();
+		var url = "http://localhost:8080/api/maplestorydapp/login";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		var data = JSON.stringify({"username": username, "password": password});
+		xhr.onload = function(e) {
+			if (this.status == 200) {
+				window.switchlogin("select","login");
+				//TODO: load character info
+				
+			} else {
+				window.alert("Password not match, please try again");
+			}
+		  };
+		xhr.send(data);
+
+		// TODO: only switch UI when the status is ok
 		window.switchlogin("select","login");
 	}
 	// sign up button
@@ -43,7 +67,25 @@ window.onload = function() {
 		window.switchlogin("signup","login");
 	}
 	$("login_btn2").onclick = function() {
-		window.switchlogin("select","signup");
+		var username = document.getElementById("username2").value;
+		var password = document.getElementById("password2").value;
+		var address = document.getElementById("walletaddress2").value;
+		var xhr = new XMLHttpRequest();
+		var url = "http://localhost:8080/api/maplestorydapp/register";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		var data = JSON.stringify({"username": username, "password": password, "bundle_address": address});
+		xhr.onload = function(e) {
+			if (this.status == 200) {
+				window.alert("Sign Up Successfully! Please go back to the log in page.");
+			} else {
+				window.alert("Username Duplicated, Please sign up again");
+			}
+		  };
+		xhr.send(data);
+	}
+	$("back_to_login_btn").onclick = function() {
+		window.switchlogin("login","signup");
 	}
 	// 帮助
 	$("help_btn").onclick = function() {
@@ -89,7 +131,7 @@ window.onload = function() {
 // switchUI的函数定义，
 window.switchUI = function(e_id) {
 	var e = $(e_id);
-	if (e.style.display == "none" || e.style.display == "") {
+	if ((e.style.display == "none" || e.style.display == "") && $("select").style.display != "block" && $("signup").style.display != "block") {
 		e.style.display = "block";
 	} else {
 		e.style.display = "none";
@@ -122,38 +164,38 @@ window.start = function(gender) {
 
 	//移动方式
 	var ctx = $("canvas").getContext("2d");
-		ctx.drawRightImage = function(img, x, y) {
-			ctx.save();
-			ctx.translate(x + img.width / 2, y + img.height / 2);
-			ctx.scale(-1, 1);
-			ctx.drawImage(img, img.width / -2, img.height / -2);
-			ctx.restore();
-		}
-		ctx.roundRect = function(x, y, width, height, radius, fill, stroke) {  
-        if (typeof stroke == "undefined") {  
-            stroke = true;  
-        }  
-        if (typeof radius === "undefined") {  
-            radius = 5;  
-        }  
-        this.beginPath();  
-        this.moveTo(x + radius, y);  
-        this.lineTo(x + width - radius, y);  
-        this.quadraticCurveTo(x + width, y, x + width, y + radius);  
-        this.lineTo(x + width, y + height - radius);  
-        this.quadraticCurveTo(x + width, y + height, x + width - radius, y+ height);  
-        this.lineTo(x + radius, y + height);  
-        this.quadraticCurveTo(x, y + height, x, y + height - radius);  
-        this.lineTo(x, y + radius);  
-        this.quadraticCurveTo(x, y, x + radius, y);  
-        this.closePath();  
-        if (stroke) {  
-            this.stroke();  
-        }  
-        if (fill) {  
-            this.fill();  
-        }  
-};  
+	ctx.drawRightImage = function(img, x, y) {
+		ctx.save();
+		ctx.translate(x + img.width / 2, y + img.height / 2);
+		ctx.scale(-1, 1);
+		ctx.drawImage(img, img.width / -2, img.height / -2);
+		ctx.restore();
+	}
+	ctx.roundRect = function(x, y, width, height, radius, fill, stroke) {  
+		if (typeof stroke == "undefined") {  
+			stroke = true;  
+		}  
+		if (typeof radius === "undefined") {  
+			radius = 5;  
+		}  
+		this.beginPath();  
+		this.moveTo(x + radius, y);  
+		this.lineTo(x + width - radius, y);  
+		this.quadraticCurveTo(x + width, y, x + width, y + radius);  
+		this.lineTo(x + width, y + height - radius);  
+		this.quadraticCurveTo(x + width, y + height, x + width - radius, y+ height);  
+		this.lineTo(x + radius, y + height);  
+		this.quadraticCurveTo(x, y + height, x, y + height - radius);  
+		this.lineTo(x, y + radius);  
+		this.quadraticCurveTo(x, y, x + radius, y);  
+		this.closePath();  
+		if (stroke) {  
+			this.stroke();  
+		}  
+		if (fill) {  
+			this.fill();  
+		}  
+	};  
   
 	//属性
 	var player;

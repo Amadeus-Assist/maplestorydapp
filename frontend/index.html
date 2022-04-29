@@ -63,13 +63,8 @@
 			<!--要在这里加一个登陆界面-->
 			<div class = "frame-login select-frame" id = "login">
 				<div class="text">Please Log In</div>
-				<fieldset>
-					<form method = "get">
-						<p class="logtext">User name: <input type = "text" name ="name"></p>
-						<p class="logtext">Password: <input type = "text" name = "name"></p>
-						<p class="logtext">Wallet Address: <input type = "text" name = "name"></p>
-					</form>
-				</fieldset>
+					<p class="logtext">User name: <input type = "text" name ="name" id="username"></p>
+					<p class="logtext">Password: <input type = "text" name = "name" id="password"></p>
 				<div align = "center">
 					<button class="login-btn" id = "login_btn">Log In</button>
 					<button class="signup-btn" id ="signup_btn">Sign Up</button>
@@ -78,15 +73,12 @@
 			<!-- sign up -->
 			<div class = "frame-login select-frame" id = "signup">
 				<div class="text">Sign Up</div>
-				<fieldset>
-					<form method = "get">
-						<p class="logtext">User name: <input type = "text" name ="name"></p>
-						<p class="logtext">Password: <input type = "text" name = "name"></p>
-						<p class="logtext">Wallet Address: <input type = "text" name = "name"></p>
-					</form>
-				</fieldset>
+				<p class="logtext">User name: <input type = "text" name ="name" id="username2"></p>
+				<p class="logtext">Password: <input type = "text" name = "name" id="password2"></p>
+				<p class="logtext">Wallet Address: <input type = "text" name = "name" id="walletaddress2"></p>
 				<div align = "center">
-					<button class="login-btn" id = "login_btn2">Log In</button>
+					<button class="login-btn" id = "login_btn2">Submit</button>
+					<button class="login-btn" id = "back_to_login_btn">Back to Log In</button>
 				</div>
 			</div>
 			<!--select character-->
