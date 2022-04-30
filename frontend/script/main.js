@@ -25,7 +25,7 @@ window.things_factory = new ThingsFactory();
 window.tips_factory = new TipsFactory();
 window.des_factory = new DesFactory();
 window.properties_factory = new PropertiesFactory();
-
+window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
 window.skills_attr = new SkillsAttr().getSkillsAttr();
 window.monsters_attr = new MonstersAttr().getMonstersAttr();
 
@@ -63,6 +63,7 @@ window.onload = function() {
 				oldmp = oldcharacter.mp 
 				oldexp = oldcharacter.exp 
 				level = oldcharacter.level
+				window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
 				window.switchlogin("select","login");
 			} else {
 				window.alert("Password not match, please try again");
@@ -135,7 +136,7 @@ window.onload = function() {
 	}, 1000 / window.FPS, false);
 	resource.load();
 }
-window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
+
 
 // switchUI的函数定义，
 window.switchUI = function(e_id) {
