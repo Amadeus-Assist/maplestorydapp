@@ -281,4 +281,37 @@ window.start = function(gender) {
 			player_data.max_attack = 500;
 		player = new Player(player_data);
 	}
+
+	//every 5 min query for equipment - how to implement
+	this.query_equipment = setInterval(queryEquip(this.username, this.token),3000)
+
+	function queryEquip(username, token){
+
+		this.backpack["装备"] = []
+		var xhr = new XMLHttpRequest();
+		var url = 'http://localhost:8080/api/maplestorydapp/query_equipment';
+		//POST
+		xhr.open("POST", url, true);
+		//设置请求头的Content-Type
+		xhr.setRequestHeader("Content-Type", "application/json");
+		//请求数据
+		var data = JSON.stringify({ "username":username, "token":token});
+		//when request completes
+		xhr.onload = function(e){
+			const data = JSON.parse(xhr.responseText);
+			if (data.status == 200) {
+				pos = 0
+				for (i in data.equipment_list){
+					//TODO: load in quipment + 属性
+					this.backpack["装备"][pos] = new EquipmentItem(i.name, thing.curr_res)
+				}
+			}else{
+				
+			}
+		};
+		//send request
+		xhr.send(data);
+
+		// this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
+	}
 }

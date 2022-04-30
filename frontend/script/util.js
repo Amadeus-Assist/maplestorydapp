@@ -340,12 +340,39 @@ function Backpack() {
 		return true;
 	}
 
+	this.addFund = function(){
+		var username = "";
+		var token = "";
+		var value = 0;
+		var xhr = new XMLHttpRequest();
+		var url = 'http://localhost:8080/api/maplestorydapp/add_balance';
+		//POST
+		xhr.open("POST", url, true);
+		//设置请求头的Content-Type
+		xhr.setRequestHeader("Content-Type", "application/json");
+		//请求数据
+		var data = JSON.stringify({"value":value, "username":username, "token":token});
+		//when request completes
+		xhr.onload = function(e){
+			
+			if (this.status == 200) {
+				window.alert("Addiing fund successfully!");
+			}else{
+				window.alert("Addiing fund Failed, please try again.");
+			}
+			};
+		//send request
+		xhr.send(data);
+
+
+	}
+
 	this.add = function(thing, username, token) {
 		switch(thing.type) {
 			case 1:
 				var equip = thing.name;
 				//empty list减少
-				var pos = this.empty_list["装备"].splice(0, 1)
+				this.empty_list["装备"].splice(0, 1)
 				//new object
 				var xhr = new XMLHttpRequest();
 				var url = 'http://localhost:8080/api/maplestorydapp/pick_equipment';
@@ -357,11 +384,12 @@ function Backpack() {
 				var data = JSON.stringify({"equipment_name":equip, "username":username, "token":token});
 				//when request completes
 				xhr.onload = function(e){
-					const data = JSON.parse(xhr.responseText)
+					const data = JSON.parse(xhr.responseText);
 					if (this.status == 200) {
 
 					}else{
-						
+							//需要充钱 
+							this.addFund();
 					}
 				};
 				//send request
@@ -369,7 +397,7 @@ function Backpack() {
 				
 				//背包里不加入装备目前
 			
-				// this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
+				
 				break;
 			case 2:
 				if (this.consumable_pos != -1) {
