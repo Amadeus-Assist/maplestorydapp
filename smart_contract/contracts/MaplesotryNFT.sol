@@ -16,6 +16,7 @@ contract MaplestoryDappNFT is ERC721 {
     mapping(address => uint256) deposit;
     mapping(uint256 => OnSell) tokenIdToOnSell;
     uint256 totalOnSell;
+    uint256 remainBalance;
     //    bool public paused = false;
     //    mapping(address => uint256) ownershipWeaponCount;
     //    mapping(uint256 => address) weaponIndexToOwner;
@@ -29,7 +30,7 @@ contract MaplestoryDappNFT is ERC721 {
         uint32 drop_time;
     }
 
-    struct OnSell{
+    struct OnSell {
         address seller;
         uint128 price;
     }
@@ -137,23 +138,23 @@ contract MaplestoryDappNFT is ERC721 {
         onSell = tokenIdToOnSell[_id].seller != address(0);
     }
 
-    event SuccessDeposit(string transactionId, uint256 amount, address receiver, address sender);
+    event SuccessDeposit(uint256 amount, address receiver, address sender);
 
-    function depositMoney(address _receiver, string memory transactionId) payable public {
+    function depositMoney(address _receiver) payable public {
         deposit[_receiver] += msg.value;
         require(operatorAddress.send(msg.value));
-        emit SuccessDeposit(transactionId, msg.value, _receiver, msg.sender);
+        emit SuccessDeposit(msg.value, _receiver, msg.sender);
     }
 
-    function getDeposit(address _owner) external view returns(uint256){
+    function getDeposit(address _owner) external view returns (uint256){
         return deposit[_owner];
     }
 
-    event PlaceOnMarket(string transactionId, uint256 tokenId, uint256 price, address seller);
-    event EquipmentSoldOut(string transactionId, uint256 tokenId, uint256 price, address seller, address buyer);
-    event CancelOnSell(string transactionId, uint256 tokenId, uint256 price, address seller);
+    event PlaceOnMarket(uint256 tokenId, uint256 price, address seller);
+    event EquipmentSoldOut(uint256 tokenId, uint256 price, address seller, address buyer);
+    event CancelOnSell(uint256 tokenId, uint256 price, address seller);
 
-    function sellEquipment(uint256 _id, uint256 price, string memory transactionId) public {
+    function sellEquipment(uint256 _id, uint256 price) public {
         require(price == uint256(uint128(price)));
         require(tokenIdToOnSell[_id].seller == address(0), "equipment already on sell");
         require(ownerOf(_id) == msg.sender, "only owner can sell his equipment");
@@ -164,10 +165,10 @@ contract MaplestoryDappNFT is ERC721 {
         });
         tokenIdToOnSell[_id] = _newOnSell;
         totalOnSell++;
-        emit PlaceOnMarket(transactionId, _id, price, msg.sender);
+        emit PlaceOnMarket(_id, price, msg.sender);
     }
 
-    function purchaseEquipment(uint256 _id, string memory transactionId) payable public {
+    function purchaseEquipment(uint256 _id) payable public {
         require(msg.value == uint256(uint128(msg.value)));
         require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
         require(msg.value >= tokenIdToOnSell[_id].price, "insufficient money");
@@ -183,17 +184,17 @@ contract MaplestoryDappNFT is ERC721 {
         delete tokenIdToOnSell[_id];
         totalOnSell--;
 
-        emit EquipmentSoldOut(transactionId, _id, price, seller, msg.sender);
+        emit EquipmentSoldOut(_id, price, seller, msg.sender);
     }
 
-    function cancelOnSell(uint256 _id, string memory transactionId) public {
+    function cancelOnSell(uint256 _id) public {
         require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
         require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
 
         uint128 price = tokenIdToOnSell[_id].price;
         delete tokenIdToOnSell[_id];
         totalOnSell--;
-        emit CancelOnSell(transactionId, _id, price, msg.sender);
+        emit CancelOnSell(_id, price, msg.sender);
     }
 
     function allOnSellEquipments() external view returns (uint256[] memory onSellTokens){
@@ -214,5 +215,24 @@ contract MaplestoryDappNFT is ERC721 {
             }
             return result;
         }
+    }
+
+    function sendToContract() public payable {
+        remainBalance += msg.value;
+    }
+
+    function getContractBalance() external view returns (uint256){
+        return remainBalance;
+    }
+
+    function withdrawBalance(uint256 amount) onlyOperator public {
+        require(amount <= remainBalance, "insufficient balance");
+        require(operatorAddress.send(amount));
+        remainBalance -= amount;
+    }
+
+    function withdrawAllBalance() onlyOperator public {
+        require(operatorAddress.send(remainBalance));
+        remainBalance = 0;
     }
 }

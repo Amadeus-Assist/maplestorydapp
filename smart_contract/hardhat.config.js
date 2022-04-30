@@ -9,7 +9,7 @@ module.exports = {
   networks: {
     Huygens_dev: {
       url:process.env.HUYGENS_DEV_URL,
-      accounts: [process.env.HUYGENS_DEV_PRIVATE_KEY]
+      accounts: [`0x${process.env.HUYGENS_DEV_PRIVATE_KEY}`]
     }
   }
 };
