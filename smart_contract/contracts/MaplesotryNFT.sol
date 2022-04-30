@@ -16,7 +16,6 @@ contract MaplestoryDappNFT is ERC721 {
     mapping(address => uint256) deposit;
     mapping(uint256 => OnSell) tokenIdToOnSell;
     uint256 totalOnSell;
-    uint256 remainBalance;
     //    bool public paused = false;
     //    mapping(address => uint256) ownershipWeaponCount;
     //    mapping(uint256 => address) weaponIndexToOwner;
@@ -215,24 +214,5 @@ contract MaplestoryDappNFT is ERC721 {
             }
             return result;
         }
-    }
-
-    function sendToContract() public payable {
-        remainBalance += msg.value;
-    }
-
-    function getContractBalance() external view returns (uint256){
-        return remainBalance;
-    }
-
-    function withdrawBalance(uint256 amount) onlyOperator public {
-        require(amount <= remainBalance, "insufficient balance");
-        require(operatorAddress.send(amount));
-        remainBalance -= amount;
-    }
-
-    function withdrawAllBalance() onlyOperator public {
-        require(operatorAddress.send(remainBalance));
-        remainBalance = 0;
     }
 }
