@@ -282,6 +282,40 @@ window.start = function(gender) {
 		player = new Player(player_data);
 	}
 
+	
+	//every 1 min update character info
+	var characterInfo = {
+		'currhp' : window.player_attr.curr_hp,
+		'currmp' : window.player_attr.curr_mp,
+		'currexp' : window.player_attr.curr_exp,
+		'currlevel' : window.player_attr.level
+	}
+	//600ms
+	this.update_characinfo = setInterval(updateInfo(this.username, this.token, characterInfo),600)
+	
+	function updateInfo(username, token, characterInfo){
+		
+		var xhr = new XMLHttpRequest();
+		var url = 'http://localhost:8080/api/maplestorydapp/update';
+		//POST
+		xhr.open("POST", url, true);
+		//设置请求头的Content-Type
+		xhr.setRequestHeader("Content-Type", "application/json");
+		//请求数据
+		var data = JSON.stringify({ "username":username, "token":token,"character_indo": characterInfo});
+		//when request completes
+		xhr.onload = function(e){
+			const data = JSON.parse(xhr.responseText);
+			if (data.status == 200) {
+			}else{
+				
+			}
+		};
+		//send request
+		xhr.send(data);
+	}
+
+
 	//every 5 min query for equipment - how to implement
 	this.query_equipment = setInterval(queryEquip(this.username, this.token),3000)
 
