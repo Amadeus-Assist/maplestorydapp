@@ -294,6 +294,7 @@ function Backpack() {
 
 	this.equipment;
 
+	//empty list is 0-23
 	for (var i in this.backpack) {
 		for (var j = 0; j < 24; j++) {
 			this.backpack[i].push(null);
@@ -339,12 +340,36 @@ function Backpack() {
 		return true;
 	}
 
-	this.add = function(thing) {
+	this.add = function(thing, username, token) {
 		switch(thing.type) {
 			case 1:
-				var pos = (this.empty_list["装备"].splice(0, 1))[0];
-				// 背包中加入装备
-				this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
+				var equip = thing.name;
+				//empty list减少
+				var pos = this.empty_list["装备"].splice(0, 1)
+				//new object
+				var xhr = new XMLHttpRequest();
+				var url = 'http://localhost:8080/api/maplestorydapp/pick_equipment';
+				//POST
+				xhr.open("POST", url, true);
+				//设置请求头的Content-Type
+				xhr.setRequestHeader("Content-Type", "application/json");
+				//请求数据
+				var data = JSON.stringify({"equipment_name":equip, "username":username, "token":token});
+				//when request completes
+				xhr.onload = function(e){
+					const data = JSON.parse(xhr.responseText)
+					if (this.status == 200) {
+
+					}else{
+						
+					}
+				};
+				//send request
+				xhr.send(data);
+				
+				//背包里不加入装备目前
+			
+				// this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
 				break;
 			case 2:
 				if (this.consumable_pos != -1) {

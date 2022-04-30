@@ -7,6 +7,7 @@ var oldexp = 0;
 var oldbackpack;
 var level = 1; 
 var token = "";
+var username = ""
 
 window.resource = new Resource();
 window.music_manager = new MusicManager();
@@ -246,7 +247,10 @@ window.start = function(gender) {
 			scene_obj.ui = ui;
 			scene_obj.player = player;
 			scene_obj.map = new Map(map_data);
-			scene_obj.bg = new Bg(bg_data);		
+			scene_obj.bg = new Bg(bg_data);
+			scene_obj.username = username;
+			scene_obj.token = token;	
+
 
 			scene_obj.is_open_ability_window = map_basic_data.is_open_ability_window;
 			scene_obj.is_open_equipment_window = map_basic_data.is_open_equipment_window;
