@@ -1,5 +1,13 @@
 // 引入其他js文件中的函数
 // window是object
+// global user info, used for initialization
+var oldhp = 50; // default
+var oldmp = 30;
+var oldexp = 0;
+var oldbackpack;
+var level = 1; 
+var token = "";
+
 window.resource = new Resource();
 window.music_manager = new MusicManager();
 
@@ -19,16 +27,12 @@ window.des_factory = new DesFactory();
 window.properties_factory = new PropertiesFactory();
 
 window.skills_attr = new SkillsAttr().getSkillsAttr();
-window.player_attr = new PlayerAttr();
 window.monsters_attr = new MonstersAttr().getMonstersAttr();
 
 window.percent = new Percent();
 
-// global user info, used for initialization
-var oldhp;
-var oldmp;
-var oldexp;
-var oldbackpack;
+
+// TODO: check other things in the character_info
 
 function $(id) {
 	return document.getElementById(id);
@@ -50,17 +54,22 @@ window.onload = function() {
 		var data = JSON.stringify({"username": username, "password": password});
 		xhr.onload = function(e) {
 			if (this.status == 200) {
-				window.switchlogin("select","login");
 				//TODO: load character info
-				
+				var text = this.responseText
+				var jsonResponse = JSON.parse(text);
+				oldcharacter = jsonResponse.character_info
+				token = jsonResponse.token
+				oldhp = oldcharacter.hp 
+				oldmp = oldcharacter.mp 
+				oldexp = oldcharacter.exp 
+				level = oldcharacter.level
+				window.switchlogin("select","login");
 			} else {
 				window.alert("Password not match, please try again");
 			}
 		  };
 		xhr.send(data);
-
 		// TODO: only switch UI when the status is ok
-		window.switchlogin("select","login");
 	}
 	// sign up button
 	$("signup_btn").onclick = function() {
@@ -126,7 +135,7 @@ window.onload = function() {
 	}, 1000 / window.FPS, false);
 	resource.load();
 }
-
+window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
 
 // switchUI的函数定义，
 window.switchUI = function(e_id) {

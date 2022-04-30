@@ -385,6 +385,71 @@ function Backpack() {
 		}
 	}
 
+	this.getRess = function(name) {
+		switch(name) {
+			case "蓝色蜗牛壳":
+				return window.resource.things["lansewoniuke"];
+			case "蘑菇芽孢":
+				return window.resource.things["moguyabao"];
+			case "绿液球":
+				return window.resource.things["lvyeqiu"];
+			case "绿水灵珠":
+				return window.resource.things["lvshuilingzhu"];
+			case "刺蘑菇盖":
+				return window.resource.things["cimogugai"];
+			case "猪头":
+				return window.resource.things["zhutou"];
+			case "蝴蝶结":
+				return window.resource.things["hudiejie"];
+			case "钢铁块":
+				return window.resource.things["gangtiekuai"];
+			case "钢铁猪的蹄子":
+				return window.resource.things["gangtiezhudetizi"];
+			case "钢铁猪盔甲碎片":
+				return window.resource.things["gangtiezhukuijiasuikuai"];
+			case "黑石块":
+				return window.resource.things["heishikuai"];
+			case "石块":
+				return window.resource.things["shikuai"];
+			case "花蘑菇盖":
+				return window.resource.things["huamogugai"];
+			case "猫皮":
+				return window.resource.things["maopi"];
+			case "星光精灵的碎块":
+				return window.resource.things["xingkuai"];
+			case "月光精灵的碎块":
+				return window.resource.things["yuekuai"];
+			case "日光精灵的碎块":
+				return window.resource.things["rikuai"];
+			case "蛇皮":
+				return window.resource.things["shepi"];
+
+			case "红色药水":
+				return window.resource.things["hong50"];
+			case "橙色药水":
+				return window.resource.things["hong150"];
+			case "白色药水":
+				return window.resource.things["hong300"];
+			case "蓝色药水":
+				return window.resource.things["lan100"];
+			case "活力神水":
+				return window.resource.things["huolishenshui"];
+
+			case "青梦":
+				return window.resource.things["qingmeng"];
+			case "黑唐衫":
+				return window.resource.things["heitangshan"];
+			case "刮胡刀":
+				return window.resource.things["guahudao"];
+			case "凤凰刃":
+				return window.resource.things["fenghuangren"];
+			case "双翼刃":
+				return window.resource.things["shuangyiren"];
+			case "枫叶刃":
+				return window.resource.things["fengyeren"];
+		}
+	}
+
 	this.x = 100;
 	this.y = 50;
 	this.open = "装备";
