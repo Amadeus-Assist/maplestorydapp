@@ -1,3 +1,3 @@
-import mcp from 'mcp.js';
+// import mcp from 'mcp.js';
 
-export default mcp;
+// export default mcp;

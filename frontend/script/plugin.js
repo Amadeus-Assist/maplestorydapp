@@ -1,4 +1,4 @@
-import store from "./store";
+// import store from "./store";
 
 window.onload = function () {
     if (typeof window.aleereum !== "undefined") {

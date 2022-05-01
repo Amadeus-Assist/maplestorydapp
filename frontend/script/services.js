@@ -1,13 +1,12 @@
 
-import store from './store'
+// import store from './store'
 
-import Big from 'bignumber.js'
+// import Big from 'bignumber.js'
 
-const Mcp = require('./mcp.js')
-const abi = require('./abi.json')
+// const Mcp = require('./mcp.js')
+// const abi = require('./abi.json')
 
-export default {
-    async deposit(limit) {
+async function deposit(limit) {
         const options = {
             host: "18.182.45.18",
             port: "8765"
@@ -18,7 +17,7 @@ export default {
 
         // const operator = "0xD296cfEd720f30b48A6EF91EBad782E3042ffbA0"
         const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
-        console.log(await mcp.request.accountBalance(receiver))
+        // console.log(await mcp.request.accountBalance(receiver))
 
         const approveAmount = new Big(limit).times('1e16').toString();
         console.log('from: '+store.state.dapp.account, 'amount: '+ approveAmount);
@@ -28,4 +27,3 @@ export default {
         });
         return response;
     }
-}

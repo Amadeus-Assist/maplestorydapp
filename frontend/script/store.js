@@ -1,6 +1,6 @@
-import { createStore } from 'vuex'
+// import { createStore } from 'vuex'
 
-export default createStore({
+store = Vuex.createStore({
     state: {
         dapp: {
             isAle: false,
