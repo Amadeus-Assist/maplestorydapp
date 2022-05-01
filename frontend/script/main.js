@@ -2,6 +2,7 @@
 // window是object
 // global user info, used for initialization
 // import services from "./services.js"
+import Mcp from "../mcp";
 
 var oldhp = 50; // default
 var oldmp = 30;
@@ -60,7 +61,7 @@ window.onload = function() {
 				//TODO: load character info
 				var text = this.responseText
 				var jsonResponse = JSON.parse(text);
-				oldcharacter = jsonResponse.character_info
+				var oldcharacter = jsonResponse.character_info
 				token = jsonResponse.token
 				oldhp = oldcharacter.hp 
 				oldmp = oldcharacter.mp 
@@ -83,9 +84,24 @@ window.onload = function() {
 	}
 	$("addfund_btn").onclick = function() {
 		var amount = document.getElementById("addfundtext").value;
-		services.deposit(amount).then((res) => {
-			console.log(res);
-		});
+		const provider = window["aleereum"]
+		const account = provider.account
+		// let Mcp = require("../mcp.js");
+		const options = {
+            host: "18.182.45.18",
+            port: "8765"
+        }
+        let mcp = new Mcp(options)
+        mcp.Contract.setProvider('http://18.182.45.18:8765/')
+        let myContract = new mcp.Contract(abi, '0x7afE6C2596A434AdB04802d103e6BCfe452864De')
+        const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
+
+        const approveAmount = new Big(amount).times('1e16').toString();
+        myContract.methods.depositMoney(receiver).sendToBlock({
+            from: account,
+            amount: approveAmount
+        });
+        // return response;
 		// window.addFund();
 	}
 	// sign up button
@@ -295,11 +311,11 @@ window.start = function(gender) {
 	initSingle();
 
 	var game_scene = new GameScene(getGameData({position: "红枫树", orientation: window.EAST}), ctx);
-	this.onkeyup = function(event) { game_scene.keyUpEvent(event);}
-	this.onkeydown = function(event) { game_scene.keyDownEvent(event); }
-	this.onmousemove = function(event) {game_scene.mouseMoveEvent(event);}
-	this.onmousedown = function(event) {game_scene.mouseDown(event);}
-	this.setInterval(function() {
+	onkeyup = function(event) { game_scene.keyUpEvent(event);}
+	onkeydown = function(event) { game_scene.keyDownEvent(event); }
+	onmousemove = function(event) {game_scene.mouseMoveEvent(event);}
+	onmousedown = function(event) {game_scene.mouseDown(event);}
+	setInterval(function() {
 		if (game_scene.is_finish) {
 			game_scene = new GameScene(getGameData(game_scene.next_map), ctx);
 		}
@@ -342,7 +358,7 @@ window.start = function(gender) {
 		backpack = new Backpack();
 		var newbackpack_equip = []
 		var newempty_list_equip = []
-		for (var i in this.newempty_list_equip) {
+		for (var i in newempty_list_equip) {
 			for (var j = 0; j < 24; j++) {
 				newbackpack_equip[i].push(null);
 				newempty_list_equip[i].push(j);
@@ -381,7 +397,7 @@ window.start = function(gender) {
 	}
 
 	//600ms
-	this.update_characinfo = setInterval(updateInfo(this.username, this.token),600)
+	setInterval(updateInfo(username, token),600)
 	
 	function updateInfo(username, token){
 			//every 1 min update character info
