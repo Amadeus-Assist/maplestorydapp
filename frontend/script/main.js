@@ -1,6 +1,8 @@
 // 引入其他js文件中的函数
 // window是object
 // global user info, used for initialization
+// import services from "./services.js"
+
 var oldhp = 50; // default
 var oldmp = 30;
 var oldexp = 0;
@@ -77,9 +79,13 @@ window.onload = function() {
 		window["aleereum"] && window["aleereum"].connect();
 		$("connect_btn").style.display = "none"
 		$("addfund_btn").style.display = "block"
+		$("addfundclass").style.display = "block"
 	}
 	$("addfund_btn").onclick = function() {
-		
+		var amount = document.getElementById("addfundtext").value;
+		services.deposit(amount).then((res) => {
+			console.log(res);
+		});
 		// window.addFund();
 	}
 	// sign up button
@@ -227,7 +233,8 @@ window.start = function(gender) {
 	e.style.display = "block"
 	var provider = window["aleereum"]
 	if (provider.isConnected) {
-		$("addfund_btn").style.display = "block"
+		$("addfund_btn").style.display = "block";
+		$("addfundclass").style.display = "block";
 	} else {
 		$("connect_btn").style.display = "block"
 	}

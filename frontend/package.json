@@ -8,7 +8,9 @@
   "dependencies": {
     "bignumber.js": "^9.0.2",
     "core-js": "^3.6.5",
-    "mcp.js": "^0.1.2"
+    "mcp.js": "^0.1.2",
+    "vue": "^3.0.0",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
@@ -26,6 +28,7 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "type": "module"
   }
 }
