@@ -335,6 +335,12 @@ window.start = function(gender) {
 		backpack = new Backpack();
 		var newbackpack_equip = []
 		var newempty_list_equip = []
+		for (var i in this.newempty_list_equip) {
+			for (var j = 0; j < 24; j++) {
+				newbackpack_equip[i].push(null);
+				newempty_list_equip[i].push(j);
+			}
+		}
 		if (oldbackpack.length != 0) {
 			for (i of oldbackpack){
 				var pos = (newempty_list_equip.splice(0, 1))[0];
@@ -346,6 +352,7 @@ window.start = function(gender) {
 				newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
 			}
 			backpack["装备"] = newbackpack_equip
+			backpack.empty_list["装备"] = newempty_list_equip
 		}
 		
 		ability = new Ability();
@@ -404,7 +411,6 @@ window.start = function(gender) {
 	function queryEquip(username, token){
 		//TODO: update this backpack array to user's backpack
 		var newbackpack_equip = [];
-		var newempty_list_equip = [];
 
 		var xhr = new XMLHttpRequest();
 		var url = 'http://localhost:8080/api/maplestorydapp/query_equipment';
@@ -418,17 +424,17 @@ window.start = function(gender) {
 		xhr.onload = function(e){
 			const data = JSON.parse(xhr.responseText);
 			if (data.status == 200) {
-				// pos = 0
+				pos = 0
 				for (i of data.equipment_list){
-					var pos = (newempty_list_equip.splice(0, 1))[0];
 					//TODO: load in equipment + 属性
 					var attack = i.attack;
 					var defense = i.defense;
 					var magic_defense = i.defense;
 					var power_hit = i.power_hit;
 					newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
+					pos += 1
 				}
-				backpack["装备"] = newbackpack_equip
+				scene_obj.backpack["装备"] = newbackpack_equip
 			}else{
 				
 			}
