@@ -2,7 +2,9 @@
 // window是object
 // global user info, used for initialization
 // import services from "./services.js"
-import Mcp from "../mcp";
+const Mcp = require('mcp.js')
+// import mcp from 'mcp.js'
+const abi = require('./abi.json')
 
 var oldhp = 50; // default
 var oldmp = 30;
