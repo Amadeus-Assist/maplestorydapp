@@ -1,44 +1,26 @@
 {
-  "name": "test",
-  "version": "0.1.0",
-  "private": true,
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "To run this frontend, first run\r ```\r npm i\r ```\r Then run \r ```\r npm rum serve\r ```\r Then open \r ```\r http://127.0.0.1:8080/index.html\r ```\r to play the game.",
+  "main": "script/main.js",
   "scripts": {
     "serve": "live-server --open=./index.html --ignore=.git,node_modules",
     "build": "browserify script/main.js -o dist/main.js",
     "watch": "watchify script/main.js -o dist/main.js -v"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "bignumber.js": "^9.0.2",
     "browserify": "^17.0.0",
-    "core-js": "^3.6.5",
-    "mcp.js": "^0.1.2",
-    "reading-time": "^1.5.0",
-    "vue": "^3.0.0",
-    "vuex": "^4.0.2",
     "watchify": "^4.0.0"
   },
   "devDependencies": {
-    "babel-core": "^7.17.10",
-    "babel-eslint": "^10.1.0",
-    "babel-preset-es2015": "^6.24.1",
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "babel-loader": "^8.2.5",
     "babelify": "^10.0.0",
-    "eslint": "^6.7.2",
     "live-server": "^1.2.1",
-    "mcp": "^1.3.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {},
-    "type": "module"
+    "mcp.js": "^0.1.2"
   },
   "browserify": {
     "transform": [
@@ -46,7 +28,7 @@
         "babelify",
         {
           "presets": [
-            "es2015"
+            "@babel/env"
           ]
         }
       ]
