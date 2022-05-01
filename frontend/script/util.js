@@ -340,39 +340,14 @@ function Backpack() {
 		return true;
 	}
 
-	this.addFund = function(){
-		var username = "";
-		var token = "";
-		var value = 0;
-		var xhr = new XMLHttpRequest();
-		var url = 'http://localhost:8080/api/maplestorydapp/add_balance';
-		//POST
-		xhr.open("POST", url, true);
-		//设置请求头的Content-Type
-		xhr.setRequestHeader("Content-Type", "application/json");
-		//请求数据
-		var data = JSON.stringify({"value":value, "username":username, "token":token});
-		//when request completes
-		xhr.onload = function(e){
-			
-			if (this.status == 200) {
-				window.alert("Addiing fund successfully!");
-			}else{
-				window.alert("Addiing fund Failed, please try again.");
-			}
-			};
-		//send request
-		xhr.send(data);
 
-
-	}
 
 	this.add = function(thing, username, token) {
 		switch(thing.type) {
 			case 1:
 				var equip = thing.name;
-				//empty list减少
-				this.empty_list["装备"].splice(0, 1)
+				//empty list减少 TODO: check whether need to splice here or later in the update equipment part
+				// this.empty_list["装备"].splice(0, 1)
 				//new object
 				var xhr = new XMLHttpRequest();
 				var url = 'http://localhost:8080/api/maplestorydapp/pick_equipment';
@@ -388,8 +363,16 @@ function Backpack() {
 					if (this.status == 200) {
 
 					}else{
+						if (data.message == "insufficient fund") {
+							var balance = data.balance
+							var alertmsg = "You have insufficient fund. Current balance is " + balance + ". Please add fund. "
+							window.alert(alertmsg);
+							// TODO: check the equipment is not actually picked up. It's still on the ground.
 							//需要充钱 
-							this.addFund();
+							// this.addFund();
+						} else {
+							window.alert("Invalid Token. Please restart the game. Your record is not saved.");
+						}	
 					}
 				};
 				//send request

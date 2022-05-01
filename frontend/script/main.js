@@ -49,7 +49,7 @@ window.onload = function() {
 		var username = document.getElementById("username").value;
 		var password = document.getElementById("password").value;
 		var xhr = new XMLHttpRequest();
-		var url = "http://localhost:8080/api/maplestorydapp/login";
+		var url = "https://1fc9b15c-b5d7-4fc4-b220-b936def08c33.mock.pstmn.io/api/maplestorydapp/login";
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		var data = JSON.stringify({"username": username, "password": password});
@@ -71,6 +71,15 @@ window.onload = function() {
 			}
 		  };
 		xhr.send(data);
+	}
+	$("connect_btn").onclick = function() {
+		window["aleereum"] && window["aleereum"].connect();
+		$("connect_btn").style.display = "none"
+		$("addfund_btn").style.display = "block"
+	}
+	$("addfund_btn").onclick = function() {
+		
+		// window.addFund();
 	}
 	// sign up button
 	$("signup_btn").onclick = function() {
@@ -186,10 +195,41 @@ window.switchlogin = function(e_id,last_id) {
 		e.style.display = "none";
 	}
 }
+
+window.addFund = function(){
+	var username = "";
+	var token = "";
+	var value = 0;
+	var xhr = new XMLHttpRequest();
+	var url = 'http://localhost:8080/api/maplestorydapp/add_balance';
+	//POST
+	xhr.open("POST", url, true);
+	//设置请求头的Content-Type
+	xhr.setRequestHeader("Content-Type", "application/json");
+	//请求数据
+	var data = JSON.stringify({"value":value, "username":username, "token":token});
+	//when request completes
+	xhr.onload = function(e){
+		
+		if (this.status == 200) {
+			window.alert("Addiing fund successfully!");
+		}else{
+			window.alert("Addiing fund Failed, please try again.");
+		}
+		};
+	//send request
+	xhr.send(data);
+}
 // start函数定义，选择角色
 window.start = function(gender) {
 	var e = $("logout_btn")
 	e.style.display = "block"
+	var provider = window["aleereum"]
+	if (provider.isConnected) {
+		$("addfund_btn").style.display = "block"
+	} else {
+		$("connect_btn").style.display = "block"
+	}
 	document.body.removeChild($("home"));
 	document.body.removeChild($("home_audio"));
 	// 选择角色
@@ -334,7 +374,7 @@ window.start = function(gender) {
 			const data = JSON.parse(xhr.responseText);
 			if (this.status == 200) {
 			} else{
-				window.alert("Invalid Token. Please log out and restart the game. Your record is not saved.");
+				window.alert("Invalid Token. Please and restart the game. Your record is not saved.");
 			}
 		};
 		//send request
@@ -384,6 +424,6 @@ window.start = function(gender) {
 	}
 }
 
-window.addEventListener('beforeunload', (event) => {
-    event.returnValue = 'You have unfinished changes!';
-});
+// window.addEventListener('beforeunload', (event) => {
+//     event.returnValue = 'You have unfinished changes!';
+// });
