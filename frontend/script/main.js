@@ -71,7 +71,6 @@ window.onload = function() {
 			}
 		  };
 		xhr.send(data);
-		// TODO: only switch UI when the status is ok
 	}
 	// sign up button
 	$("signup_btn").onclick = function() {
@@ -282,19 +281,17 @@ window.start = function(gender) {
 		player = new Player(player_data);
 	}
 
-	
-	//every 1 min update character info
-	var characterInfo = {
-		'currhp' : window.player_attr.curr_hp,
-		'currmp' : window.player_attr.curr_mp,
-		'currexp' : window.player_attr.curr_exp,
-		'currlevel' : window.player_attr.level
-	}
 	//600ms
-	this.update_characinfo = setInterval(updateInfo(this.username, this.token, characterInfo),600)
+	this.update_characinfo = setInterval(updateInfo(this.username, this.token),600)
 	
-	function updateInfo(username, token, characterInfo){
-		
+	function updateInfo(username, token){
+			//every 1 min update character info
+		var characterInfo = {
+			'currhp' : window.player_attr.curr_hp,
+			'currmp' : window.player_attr.curr_mp,
+			'currexp' : window.player_attr.curr_exp,
+			'currlevel' : window.player_attr.level
+		}
 		var xhr = new XMLHttpRequest();
 		var url = 'http://localhost:8080/api/maplestorydapp/update';
 		//POST
@@ -307,8 +304,8 @@ window.start = function(gender) {
 		xhr.onload = function(e){
 			const data = JSON.parse(xhr.responseText);
 			if (data.status == 200) {
-			}else{
-				
+			} else{
+				window.alert("Invalid Token. Please log out and restart the game. Your record is not saved.");
 			}
 		};
 		//send request
@@ -320,8 +317,10 @@ window.start = function(gender) {
 	this.query_equipment = setInterval(queryEquip(this.username, this.token),3000)
 
 	function queryEquip(username, token){
+		//TODO: update this backpack array to user's backpack
+		var newbackpack_equip = [];
+		var newempty_list_equip = [];
 
-		this.backpack["装备"] = []
 		var xhr = new XMLHttpRequest();
 		var url = 'http://localhost:8080/api/maplestorydapp/query_equipment';
 		//POST
@@ -334,11 +333,17 @@ window.start = function(gender) {
 		xhr.onload = function(e){
 			const data = JSON.parse(xhr.responseText);
 			if (data.status == 200) {
-				pos = 0
+				// pos = 0
 				for (i in data.equipment_list){
-					//TODO: load in quipment + 属性
-					this.backpack["装备"][pos] = new EquipmentItem(i.name, thing.curr_res)
+					var pos = (newempty_list_equip.splice(0, 1))[0];
+					//TODO: load in equipment + 属性
+					var attack = i.attack;
+					var defense = i.defense;
+					var magic_defense = i.defense;
+					var power_hit = i.power_hit;
+					newbackpack_equip[pos] = new EquipmentItem(i.name, thing.curr_res, attack, defense, magic_defense, power_hit)
 				}
+				backpack["装备"] = newbackpack_equip
 			}else{
 				
 			}

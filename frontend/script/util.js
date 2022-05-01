@@ -438,71 +438,6 @@ function Backpack() {
 		}
 	}
 
-	this.getRess = function(name) {
-		switch(name) {
-			case "蓝色蜗牛壳":
-				return window.resource.things["lansewoniuke"];
-			case "蘑菇芽孢":
-				return window.resource.things["moguyabao"];
-			case "绿液球":
-				return window.resource.things["lvyeqiu"];
-			case "绿水灵珠":
-				return window.resource.things["lvshuilingzhu"];
-			case "刺蘑菇盖":
-				return window.resource.things["cimogugai"];
-			case "猪头":
-				return window.resource.things["zhutou"];
-			case "蝴蝶结":
-				return window.resource.things["hudiejie"];
-			case "钢铁块":
-				return window.resource.things["gangtiekuai"];
-			case "钢铁猪的蹄子":
-				return window.resource.things["gangtiezhudetizi"];
-			case "钢铁猪盔甲碎片":
-				return window.resource.things["gangtiezhukuijiasuikuai"];
-			case "黑石块":
-				return window.resource.things["heishikuai"];
-			case "石块":
-				return window.resource.things["shikuai"];
-			case "花蘑菇盖":
-				return window.resource.things["huamogugai"];
-			case "猫皮":
-				return window.resource.things["maopi"];
-			case "星光精灵的碎块":
-				return window.resource.things["xingkuai"];
-			case "月光精灵的碎块":
-				return window.resource.things["yuekuai"];
-			case "日光精灵的碎块":
-				return window.resource.things["rikuai"];
-			case "蛇皮":
-				return window.resource.things["shepi"];
-
-			case "红色药水":
-				return window.resource.things["hong50"];
-			case "橙色药水":
-				return window.resource.things["hong150"];
-			case "白色药水":
-				return window.resource.things["hong300"];
-			case "蓝色药水":
-				return window.resource.things["lan100"];
-			case "活力神水":
-				return window.resource.things["huolishenshui"];
-
-			case "青梦":
-				return window.resource.things["qingmeng"];
-			case "黑唐衫":
-				return window.resource.things["heitangshan"];
-			case "刮胡刀":
-				return window.resource.things["guahudao"];
-			case "凤凰刃":
-				return window.resource.things["fenghuangren"];
-			case "双翼刃":
-				return window.resource.things["shuangyiren"];
-			case "枫叶刃":
-				return window.resource.things["fengyeren"];
-		}
-	}
-
 	this.x = 100;
 	this.y = 50;
 	this.open = "装备";
@@ -928,10 +863,10 @@ function Backpack() {
 	}
 }
 
-function EquipmentItem(name, img) {
+function EquipmentItem(name, img, attack = -1, defense = -1, magic_defense = -1, power_hit = -1) {
 	this.name = name;
 	this.img = img;
-	this.properties = window.properties_factory.getProperties(this.name);
+	this.properties = window.properties_factory.getProperties(this.name, attack, defense, magic_defense, power_hit);
 	this.des = window.des_factory.equipmentDes(this.properties);
 }
 
@@ -1038,21 +973,27 @@ function DesFactory() {
 }
 
 function PropertiesFactory() {
-	this.getProperties = function(name) {
+	this.getProperties = function(name, attack, defense, magic_defense, power_hit) {
 		switch(name) {
 			// 各种武器的属性
 			case "刮胡刀":
-				return {attack: 10 + parseInt(Math.random() * 6), defense: parseInt(Math.random() * 6), magic_defense: parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 10 + parseInt(Math.random() * 6), defense: parseInt(Math.random() * 6), magic_defense: parseInt(Math.random() * 6), power_hit: 0}
 			case "凤凰刃":
-				return {attack: 72 + parseInt(Math.random() * 6), defense: 30 + parseInt(Math.random() * 6), magic_defense: 40 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 72 + parseInt(Math.random() * 6), defense: 30 + parseInt(Math.random() * 6), magic_defense: 40 + parseInt(Math.random() * 6), power_hit: 0}
 			case "枫叶刃":
-				return {attack: 34 + parseInt(Math.random() * 6), defense: 10 + parseInt(Math.random() * 6), magic_defense: 15 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 34 + parseInt(Math.random() * 6), defense: 10 + parseInt(Math.random() * 6), magic_defense: 15 + parseInt(Math.random() * 6), power_hit: 0}
 			case "双翼刃":
-				return {attack: 55 + parseInt(Math.random() * 6), defense: 24 + parseInt(Math.random() * 6), magic_defense: 60 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 55 + parseInt(Math.random() * 6), defense: 24 + parseInt(Math.random() * 6), magic_defense: 60 + parseInt(Math.random() * 6), power_hit: 0}
 			case "青梦":
-				return {attack: parseInt(Math.random() * 6), defense: 45 + parseInt(Math.random() * 6), magic_defense: 30 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: parseInt(Math.random() * 6), defense: 45 + parseInt(Math.random() * 6), magic_defense: 30 + parseInt(Math.random() * 6), power_hit: 0}
 			case "黑唐衫":
-				return {attack: parseInt(Math.random() * 6), defense: 120 + parseInt(Math.random() * 11), magic_defense: 120 + parseInt(Math.random() * 11), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: parseInt(Math.random() * 6), defense: 120 + parseInt(Math.random() * 11), magic_defense: 120 + parseInt(Math.random() * 11), power_hit: 0}
 		}
 	}
 }
