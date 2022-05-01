@@ -109,6 +109,33 @@ window.onload = function() {
 	$("right_img").onclick = function() {
 		start("female");
 	}
+
+	$("logout_btn").onclick = function() {
+		var characterInfo = {
+			'currhp' : window.player_attr.curr_hp,
+			'currmp' : window.player_attr.curr_mp,
+			'currexp' : window.player_attr.curr_exp,
+			'currlevel' : window.player_attr.level
+		}
+		var xhr = new XMLHttpRequest();
+		var url = 'http://localhost:8080/api/maplestorydapp/logout';
+		//POST
+		xhr.open("POST", url, true);
+		//设置请求头的Content-Type
+		xhr.setRequestHeader("Content-Type", "application/json");
+		//请求数据
+		var data = JSON.stringify({"username":username, "token":token,"character_indo": characterInfo});
+		//when request completes
+		xhr.onload = function(e){
+			if (this.status == 200) {
+				window.alert("Data Saved! You can close the window!");
+			} else{
+				window.alert("Invalid Token. Please restart the game. Your record is not saved.");
+			}
+		};
+		//send request
+		xhr.send(data);
+	}
 	
 	var canvas = $("canvas");
 	//获取作用于画布的API，获取canvas的一些属性
@@ -161,6 +188,8 @@ window.switchlogin = function(e_id,last_id) {
 }
 // start函数定义，选择角色
 window.start = function(gender) {
+	var e = $("logout_btn")
+	e.style.display = "block"
 	document.body.removeChild($("home"));
 	document.body.removeChild($("home_audio"));
 	// 选择角色
@@ -303,7 +332,7 @@ window.start = function(gender) {
 		//when request completes
 		xhr.onload = function(e){
 			const data = JSON.parse(xhr.responseText);
-			if (data.status == 200) {
+			if (this.status == 200) {
 			} else{
 				window.alert("Invalid Token. Please log out and restart the game. Your record is not saved.");
 			}
@@ -354,3 +383,7 @@ window.start = function(gender) {
 		// this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
 	}
 }
+
+window.addEventListener('beforeunload', (event) => {
+    event.returnValue = 'You have unfinished changes!';
+});
