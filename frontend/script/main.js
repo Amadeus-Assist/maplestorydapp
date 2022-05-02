@@ -59,13 +59,15 @@ window.onload = function () {
                 var text = this.responseText
                 var jsonResponse = JSON.parse(text);
                 oldcharacter = jsonResponse.character_info
+                console.log(oldcharacter)
                 token = jsonResponse.token
                 oldhp = oldcharacter.hp
                 oldmp = oldcharacter.mp
                 oldexp = oldcharacter.exp
                 level = oldcharacter.level
                 oldbackpack = oldcharacter.equipment
-                if (oldcharacter) {
+                if (Object.keys(oldcharacter).length !== 0) {
+                    console.log("get here")
                     window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
                 }
                 window.switchlogin("select", "login");
@@ -124,10 +126,10 @@ window.onload = function () {
 
     $("logout_btn").onclick = function () {
         var characterInfo = {
-            'currhp': window.player_attr.curr_hp,
-            'currmp': window.player_attr.curr_mp,
-            'currexp': window.player_attr.curr_exp,
-            'currlevel': window.player_attr.level
+            'hp': window.player_attr.curr_hp,
+            'mp': window.player_attr.curr_mp,
+            'exp': window.player_attr.curr_exp,
+            'level': window.player_attr.level
         }
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/logout/';
@@ -399,11 +401,12 @@ window.start = function (gender) {
     function updateInfo(username, token) {
         //every 1 min update character info
         var characterInfo = {
-            'currhp': window.player_attr.curr_hp,
-            'currmp': window.player_attr.curr_mp,
-            'currexp': window.player_attr.curr_exp,
-            'currlevel': window.player_attr.level
+            'hp': window.player_attr.curr_hp,
+            'mp': window.player_attr.curr_mp,
+            'exp': window.player_attr.curr_exp,
+            'level': window.player_attr.level
         }
+        console.log("chara_info: "+JSON.stringify(characterInfo, null, 4))
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/update/';
         //POST
@@ -443,18 +446,28 @@ window.start = function (gender) {
         //when request completes
         xhr.onload = function (e) {
             const data = JSON.parse(xhr.responseText);
-            if (data.status == 200) {
+            // console.log(game_scene.backpack.backpack)
+            console.log("equip data: "+xhr.responseText)
+            console.log(window.resource.things)
+            if (this.status == 200) {
                 pos = 0
                 for (i of data.equipment_list) {
                     //TODO: load in equipment + 属性
                     var attack = i.attack;
                     var defense = i.defense;
-                    var magic_defense = i.defense;
+                    var magic_defense = i.magic_defense;
                     var power_hit = i.power_hit;
-                    newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
+                    // console.log(game_scene.backpack.backpack)
+                    console.log(game_scene.backpack.empty_list)
+                    var posi = game_scene.backpack.empty_list["装备"].shift()
+                    console.log("insert pos: "+posi)
+                    game_scene.backpack.backpack["装备"][posi]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
+                    // newbackpack_equip.push(new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit))
                     pos += 1
                 }
-                scene_obj.backpack["装备"] = newbackpack_equip
+                // console.log(newbackpack_equip)
+                console.log(game_scene)
+                game_scene.draw();
             } else {
 
             }

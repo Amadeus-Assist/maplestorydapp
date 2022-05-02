@@ -1,7 +1,8 @@
 from web3 import Web3
 import json
 
-with open("abi.json", "r") as file:
+with open("backend\\abi.json",
+          "r") as file:
     abi = json.load(file)
 
 w3 = Web3(Web3.HTTPProvider("http://18.182.45.18:8765/"))
@@ -44,3 +45,4 @@ def selfNFT(receiver_address):
         myItemlist = myItemlist + [Weapon]
         flag = 1
     print(myItemlist)
+    return myItemlist

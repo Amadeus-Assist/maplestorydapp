@@ -4,12 +4,12 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 
 from . import mongodb
+from . import web3_lib
 
 import pymongo
 import random
 
 token_dict = {}
-
 
 def login(request):
     """Handle user login"""
@@ -45,7 +45,7 @@ def login(request):
                 'token': token,  # 存储token到dict
                 'character_info': character_info
             }
-            print(response_data)
+            print("login response: ", response_data)
             return JsonResponse(response_data, safe=False, status=200)
 
 
@@ -86,7 +86,29 @@ def register(request):
 
 
 def logout(request):
-    update(request)
+    if request.method == 'POST':
+        mongo_client = mongodb.get_client()
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        print(body)
+
+        username = body['username']
+        token = body['token']
+        character_info = body['character_info']
+
+        print("token dict: ", token_dict)
+
+        if username not in token_dict or token != token_dict[username]:
+            return HttpResponseBadRequest('Invalid token')
+        else:
+            myquery = {"username": username}
+            new_values = {"$set": {"character_info": character_info}}
+            print("logout saved: ", character_info)
+            mongo_client['user_info']['info_collection'].update(myquery, new_values)  # 1 username <-> 1 char_info ??
+            response_data = {
+                'message': 'ok'
+            }
+        return JsonResponse(response_data, safe=False, status=200)
 
 
 def update(request):
@@ -126,7 +148,37 @@ def add_balance(request):
 
 def query_equipment(request):
     """Handle querying current equipment of particular character"""
-    pass
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        print(body)
+
+        username = body['username']
+        token = body['token']
+
+        if username not in token_dict or token != token_dict[username]:
+            return HttpResponseBadRequest('Invalid token')
+
+        mongo_client = mongodb.get_client()
+        query = {"username": username}
+        query_result = mongo_client['user_info']['info_collection'].find_one(query)
+        address = query_result['bundle_address']
+        e_list = web3_lib.selfNFT(address)
+        print(e_list)
+        return_list = []
+        for equip in e_list:
+            if equip[0] != "blade":
+                return_list.append({
+                    'name': equip[0],
+                    'attack': equip[1],
+                    'defense': equip[2],
+                    'magic_defense': equip[3],
+                    'power_hit': equip[4]
+                })
+        response_data = {
+            'equipment_list': return_list
+        }
+        return JsonResponse(response_data, safe=False, status=200)
     # if request.method == 'POST':
     #     mongo_client = mongodb.get_client()
     #     body_unicode = request.body.decode('utf-8')
