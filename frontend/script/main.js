@@ -226,11 +226,11 @@ window.start = function(gender) {
 	var e = $("logout_btn")
 	e.style.display = "block"
 	var provider = window["aleereum"]
-	if (provider.isConnected) {
-		$("addfund_btn").style.display = "block"
-	} else {
-		$("connect_btn").style.display = "block"
-	}
+	// if (provider.isConnected) {
+	// 	$("addfund_btn").style.display = "block"
+	// } else {
+	// 	$("connect_btn").style.display = "block"
+	// }
 	document.body.removeChild($("home"));
 	document.body.removeChild($("home_audio"));
 	// 选择角色
@@ -333,27 +333,27 @@ window.start = function(gender) {
 
 	function initSingle() {
 		backpack = new Backpack();
-		var newbackpack_equip = []
-		var newempty_list_equip = []
-		for (var i in this.newempty_list_equip) {
-			for (var j = 0; j < 24; j++) {
-				newbackpack_equip[i].push(null);
-				newempty_list_equip[i].push(j);
-			}
-		}
-		if (oldbackpack.length != 0) {
-			for (i of oldbackpack){
-				var pos = (newempty_list_equip.splice(0, 1))[0];
-				//TODO: load in equipment + 属性
-				var attack = i.attack;
-				var defense = i.defense;
-				var magic_defense = i.defense;
-				var power_hit = i.power_hit;
-				newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
-			}
-			backpack["装备"] = newbackpack_equip
-			backpack.empty_list["装备"] = newempty_list_equip
-		}
+		// var newbackpack_equip = []
+		// var newempty_list_equip = []
+		// for (var i in this.newempty_list_equip) {
+		// 	for (var j = 0; j < 24; j++) {
+		// 		newbackpack_equip[i].push(null);
+		// 		newempty_list_equip[i].push(j);
+		// 	}
+		// }
+		// if (oldbackpack.length != 0) {
+		// 	for (i of oldbackpack){
+		// 		var pos = (newempty_list_equip.splice(0, 1))[0];
+		// 		//TODO: load in equipment + 属性
+		// 		var attack = i.attack;
+		// 		var defense = i.defense;
+		// 		var magic_defense = i.defense;
+		// 		var power_hit = i.power_hit;
+		// 		newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
+		// 	}
+		// 	backpack["装备"] = newbackpack_equip
+		// 	backpack.empty_list["装备"] = newempty_list_equip
+		// }
 		
 		ability = new Ability();
 		equipment = new Equipment();
