@@ -12,6 +12,9 @@ function GameScene(scene_obj, ctx) {
 	this.bg = scene_obj.bg;
 
 	this.doors = scene_obj.doors;
+	this.username = scene_obj.username;
+	this.token = scene_obj.token;
+
 	this.ctx = ctx;
 
 	this.is_finish = false;
@@ -495,7 +498,7 @@ function GameScene(scene_obj, ctx) {
 				if (this.things[i].type == 0) {
 					window.player_attr.money += this.things[i].money;
 				} else {
-					this.backpack.add(this.things[i]);
+					this.backpack.add(this.things[i], this.username,this.token);
 				}
 				this.things.splice(i, 1);
 				this.player.is_get = false;
