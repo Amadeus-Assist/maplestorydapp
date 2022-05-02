@@ -11,32 +11,36 @@ receiver_address = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
 maple_contract = w3.eth.contract(address=contract_address, abi=abi)
 
-EquipMenu = ['Name:','ATK','DEF','MAG','POW','ToD','state']
-#print(maple_contract.functions.getEquipment(1).call())
-flag = 0
-for i in range(1,maple_contract.functions.totalSupply().call()+1):
-    if flag == 0:
-        print("Market Item List:")
-    Weapon = maple_contract.functions.getEquipment(i).call()
-    mydict = dict(zip(EquipMenu, Weapon))
-    print(mydict)
-
-#print(maple_contract.functions.createEquipmentNFT(operator_address,'阿姆斯特朗回旋炮',114,514,1919,810,142412,0).call())
-
-Account_remain = maple_contract.functions.getDeposit(receiver_address).call()
-print("Account Balance:", Account_remain)
-
-TotalNum = maple_contract.functions.totalSupply().call()
-print("Total Supply Number:", TotalNum)
+#EquipMenu = ['Name:','ATK','DEF','MAG','POW','ToD','state']
 
 
-#print(maple_contract.functions.equipmentOfOwner(receiver_address).call())
-flag = 0
-for i in range(0,len(maple_contract.functions.equipmentOfOwner(receiver_address).call())):
-    if flag == 0:
-        print("Player's Item List:")
-    OwnedList = maple_contract.functions.equipmentOfOwner(receiver_address).call()
-    Weapon = maple_contract.functions.getEquipment(OwnedList[i]).call()
-    mydict = dict(zip(EquipMenu, Weapon))
-    flag = 1
-    print(mydict)
+def marketMenu():
+    flag = 0
+    for i in range(1,maple_contract.functions.totalSupply().call()+1):
+        if flag == 0:
+            print("Market Item List:")
+            marketList = []
+        Weapon = maple_contract.functions.getEquipment(i).call()
+        #mydict = list(zip(EquipMenu, Weapon))
+        marketList = marketList + [Weapon]
+        flag = 1
+    TotalNum = maple_contract.functions.totalSupply().call()
+    print("Total Supply Number:", TotalNum)
+    print(marketList)
+
+def selfBalance(receiver_address):
+    Account_remain = maple_contract.functions.getDeposit(receiver_address).call()
+    print("Account Balance:", Account_remain)
+
+
+def selfNFT(receiver_address):
+    flag = 0
+    for i in range(0,len(maple_contract.functions.equipmentOfOwner(receiver_address).call())):
+        if flag == 0:
+            print("Player's Item List:")
+            myItemlist = []
+        OwnedList = maple_contract.functions.equipmentOfOwner(receiver_address).call()
+        Weapon = maple_contract.functions.getEquipment(OwnedList[i]).call()
+        myItemlist = myItemlist + [Weapon]
+        flag = 1
+    print(myItemlist)
