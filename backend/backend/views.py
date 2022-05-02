@@ -3,8 +3,14 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
 from rest_framework import status
 from django.shortcuts import render, redirect
+
 from . import mongodb
+
 import pymongo
+import random
+
+
+token_dict = {}
 
 
 def login(request):
@@ -23,7 +29,8 @@ def login(request):
         if not mongo_client['user_info']['info_collection'].find(query):
             return HttpResponseBadRequest("Invalid login info")
         else:
-            # token = mongo_client['user_info']['info_collection'].find(query, {'token': 1}) 生成随机数
+            token = random.randint(1, 2000)  # 生成随机数
+            token_dict[username] = token
             character_info = mongo_client['user_info']['info_collection'].find(query, {'character_info': 1})
             response_data = {
                 'message': 'ok',
@@ -82,15 +89,11 @@ def update(request):
         body = json.loads(body_unicode)
 
         username = body['username']
-        # token = body['token'] #################################
+        token = body['token']
         character_info = body['character_info']
-        query = {'token': token}
 
-        if not mongo_client['user_info']['info_collection'].find(query):
-            response_data = {
-                'message': 'Invalid token'
-            }
-            return JsonResponse(response_data, safe=False, status=400)
+        if username not in token_dict or token != token_dict[username]:
+            return HttpResponseBadRequest('Invalid token')
         else:
             myquery = {"username": username}
             new_values = {"$set": {"character_info": character_info}}
@@ -113,18 +116,18 @@ def add_balance(request):
 
 def query_equipment(request):
     """Handle querying current equipment of particular character"""
-
-    if request.method == 'GET':
-        mongo_client = mongodb.get_client()
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-
-        username = body['username']
-        token = body['token']
-        query = {'token': token}
-
-        equipment = mongo_client['user_info']['info_collection'].find(query, {'equipment': 1})
-        response_data = list(equipment)
-
-        return JsonResponse(response_data, safe=False, status=200)
+    pass
+    # if request.method == 'POST':
+    #     mongo_client = mongodb.get_client()
+    #     body_unicode = request.body.decode('utf-8')
+    #     body = json.loads(body_unicode)
+    #
+    #     username = body['username']
+    #     token = body['token']
+    #     query = {'token': token}
+    #
+    #     equipment = mongo_client['user_info']['info_collection'].find(query, {'equipment': 1})
+    #     response_data = list(equipment)
+    #
+    #     return JsonResponse(response_data, safe=False, status=200)
 
