@@ -1,14 +1,12 @@
 import json
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
-from rest_framework import status
 from django.shortcuts import render, redirect
 
 from . import mongodb
 
 import pymongo
 import random
-
 
 token_dict = {}
 
@@ -26,17 +24,28 @@ def login(request):
 
         mongo_client = mongodb.get_client()
         query = {'username': username, 'password': password}
-        if not mongo_client['user_info']['info_collection'].find(query):
+        query_result = mongo_client['user_info']['info_collection'].find_one(query)
+        print(query_result)
+        if not query_result:
             return HttpResponseBadRequest("Invalid login info")
         else:
+            print("here2")
+            print('character_info' in query_result)
+            if 'character_info' in query_result:
+                character_info = query_result['character_info']
+            else:
+                character_info = ""
+             # if ('character_info' in query_result) else ""
+            # print("chara_info: "+query_result['character_info'])
             token = random.randint(1, 2000)  # 生成随机数
             token_dict[username] = token
-            character_info = mongo_client['user_info']['info_collection'].find(query, {'character_info': 1})
+            # character_info = mongo_client['user_info']['info_collection'].find_one(query, {'character_info': 1})
             response_data = {
                 'message': 'ok',
                 'token': token,  # 存储token到dict
                 'character_info': character_info
             }
+            print(response_data)
             return JsonResponse(response_data, safe=False, status=200)
 
 
@@ -56,13 +65,13 @@ def register(request):
         username = body['username']
         password = body['password']
         bundle_address = body['bundle_address']
-        query = {'username': username, 'password': password}
+        query1 = {'username': username}
+        query2 = {'bundle_address': bundle_address}
+        print(body)
 
-        if mongo_client['user_info']['info_collection'].find(query):
-            response_data = {
-                'message': 'Duplicate register info.'
-            }
-            return JsonResponse(response_data, safe=False, status=400)
+        if mongo_client['user_info']['info_collection'].find_one(query1) or mongo_client['user_info'][
+            'info_collection'].find_one(query2):
+            return HttpResponseBadRequest("Duplicate register info.")
         else:
             insert_data = {
                 'username': username,
@@ -87,6 +96,7 @@ def update(request):
         mongo_client = mongodb.get_client()
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
+        print(body)
 
         username = body['username']
         token = body['token']
@@ -130,4 +140,3 @@ def query_equipment(request):
     #     response_data = list(equipment)
     #
     #     return JsonResponse(response_data, safe=False, status=200)
-
