@@ -294,11 +294,13 @@ function Backpack() {
 
 	this.equipment;
 
+	//empty list is 0-23
 	for (var i in this.backpack) {
 		for (var j = 0; j < 24; j++) {
 			this.backpack[i].push(null);
 			this.empty_list[i].push(j);
 		}
+		console.log(this.empty_list)
 	}
 
 	this.checkCanAdd = function(thing) {
@@ -339,12 +341,48 @@ function Backpack() {
 		return true;
 	}
 
-	this.add = function(thing) {
+
+
+	this.add = function(thing, username, token) {
 		switch(thing.type) {
 			case 1:
-				var pos = (this.empty_list["装备"].splice(0, 1))[0];
-				// 背包中加入装备
-				this.backpack["装备"][pos] = new EquipmentItem(thing.name, thing.curr_res);
+				var equip = thing.name;
+				//empty list减少 TODO: check whether need to splice here or later in the update equipment part
+				this.empty_list["装备"].splice(0, 1)
+				//new object
+				console.log(this.empty_list)
+				var xhr = new XMLHttpRequest();
+				var url = 'http://localhost:8080/api/maplestorydapp/pick_equipment';
+				//POST
+				xhr.open("POST", url, true);
+				//设置请求头的Content-Type
+				xhr.setRequestHeader("Content-Type", "application/json");
+				//请求数据
+				var data = JSON.stringify({"equipment_name":equip, "username":username, "token":token});
+				//when request completes
+				xhr.onload = function(e){
+					const data = JSON.parse(xhr.responseText);
+					if (this.status == 200) {
+
+					}else{
+						if (data.message == "insufficient fund") {
+							var balance = data.balance
+							var alertmsg = "You have insufficient fund. Current balance is " + balance + ". Please add fund. "
+							window.alert(alertmsg);
+							// TODO: check the equipment is not actually picked up. It's still on the ground.
+							//需要充钱 
+							// this.addFund();
+						} else {
+							window.alert("Invalid Token. Please restart the game. Your record is not saved.");
+						}	
+					}
+				};
+				//send request
+				xhr.send(data);
+				
+				//背包里不加入装备目前
+			
+				
 				break;
 			case 2:
 				if (this.consumable_pos != -1) {
@@ -810,10 +848,10 @@ function Backpack() {
 	}
 }
 
-function EquipmentItem(name, img) {
+function EquipmentItem(name, img, attack = -1, defense = -1, magic_defense = -1, power_hit = -1) {
 	this.name = name;
 	this.img = img;
-	this.properties = window.properties_factory.getProperties(this.name);
+	this.properties = window.properties_factory.getProperties(this.name, attack, defense, magic_defense, power_hit);
 	this.des = window.des_factory.equipmentDes(this.properties);
 }
 
@@ -920,21 +958,27 @@ function DesFactory() {
 }
 
 function PropertiesFactory() {
-	this.getProperties = function(name) {
+	this.getProperties = function(name, attack, defense, magic_defense, power_hit) {
 		switch(name) {
 			// 各种武器的属性
 			case "刮胡刀":
-				return {attack: 10 + parseInt(Math.random() * 6), defense: parseInt(Math.random() * 6), magic_defense: parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 10 + parseInt(Math.random() * 6), defense: parseInt(Math.random() * 6), magic_defense: parseInt(Math.random() * 6), power_hit: 0}
 			case "凤凰刃":
-				return {attack: 72 + parseInt(Math.random() * 6), defense: 30 + parseInt(Math.random() * 6), magic_defense: 40 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 72 + parseInt(Math.random() * 6), defense: 30 + parseInt(Math.random() * 6), magic_defense: 40 + parseInt(Math.random() * 6), power_hit: 0}
 			case "枫叶刃":
-				return {attack: 34 + parseInt(Math.random() * 6), defense: 10 + parseInt(Math.random() * 6), magic_defense: 15 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 34 + parseInt(Math.random() * 6), defense: 10 + parseInt(Math.random() * 6), magic_defense: 15 + parseInt(Math.random() * 6), power_hit: 0}
 			case "双翼刃":
-				return {attack: 55 + parseInt(Math.random() * 6), defense: 24 + parseInt(Math.random() * 6), magic_defense: 60 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: 55 + parseInt(Math.random() * 6), defense: 24 + parseInt(Math.random() * 6), magic_defense: 60 + parseInt(Math.random() * 6), power_hit: 0}
 			case "青梦":
-				return {attack: parseInt(Math.random() * 6), defense: 45 + parseInt(Math.random() * 6), magic_defense: 30 + parseInt(Math.random() * 6), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: parseInt(Math.random() * 6), defense: 45 + parseInt(Math.random() * 6), magic_defense: 30 + parseInt(Math.random() * 6), power_hit: 0}
 			case "黑唐衫":
-				return {attack: parseInt(Math.random() * 6), defense: 120 + parseInt(Math.random() * 11), magic_defense: 120 + parseInt(Math.random() * 11), power_hit: 0}
+				return {attack: attack, defense: defense, magic_defense: magic_defense, power_hit: power_hit}
+				// return {attack: parseInt(Math.random() * 6), defense: 120 + parseInt(Math.random() * 11), magic_defense: 120 + parseInt(Math.random() * 11), power_hit: 0}
 		}
 	}
 }

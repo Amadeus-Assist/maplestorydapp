@@ -89,17 +89,17 @@ function SkillsAttr() {
 	}
 }
 
-function PlayerAttr() {
-	this.level = 1;
+function PlayerAttr(hp, mp, exp, level) {
+	this.level = level;
 	this.level_exp = [15, 34, 57, 92, 135, 372, 560, 840, 1242, 1490, 1788, 2145, 2574, 
 					   3088, 3705, 4446, 5335, 6402, 7682, 9218, 11061, 13273, 15927, 19112,
 					   22934, 27520, 33024, 39628, 47553, 51357, 55465, 59902, 64694, 69869, 75458,
 					   81494, 88013, 999999999];
 	this.max_hp = 50;
-	this.curr_hp = this.max_hp;
+	this.curr_hp = hp;
 	this.max_mp = 30;
-	this.curr_mp = this.max_mp;
-	this.curr_exp = 0;
+	this.curr_mp = mp;
+	this.curr_exp = exp;
 	this.max_exp = this.level_exp[0]; 
 
 	this.money = 0;
