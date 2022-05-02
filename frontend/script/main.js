@@ -49,7 +49,7 @@ window.onload = function() {
 		var username = document.getElementById("username").value;
 		var password = document.getElementById("password").value;
 		var xhr = new XMLHttpRequest();
-		var url = "https://1fc9b15c-b5d7-4fc4-b220-b936def08c33.mock.pstmn.io/api/maplestorydapp/login";
+		var url = "http://localhost:8080/api/maplestorydapp/login";
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		var data = JSON.stringify({"username": username, "password": password});
