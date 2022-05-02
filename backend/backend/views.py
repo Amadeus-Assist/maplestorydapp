@@ -1,5 +1,6 @@
 import json
 from django.http import JsonResponse
+from django.http import HttpResponseBadRequest
 from rest_framework import status
 from django.shortcuts import render, redirect
 from . import mongodb
@@ -20,16 +21,13 @@ def login(request):
         mongo_client = mongodb.get_client()
         query = {'username': username, 'password': password}
         if not mongo_client['user_info']['info_collection'].find(query):
-            response_data = {
-                'message': 'invalid login info.'
-            }
-            return JsonResponse(response_data, safe=False, status=400)  # status???
+            return HttpResponseBadRequest("Invalid login info")
         else:
-            token = mongo_client['user_info']['info_collection'].find(query, {'token': 1})
+            # token = mongo_client['user_info']['info_collection'].find(query, {'token': 1}) 生成随机数
             character_info = mongo_client['user_info']['info_collection'].find(query, {'character_info': 1})
             response_data = {
                 'message': 'ok',
-                'token': token,
+                'token': token,  # 存储token到dict
                 'character_info': character_info
             }
             return JsonResponse(response_data, safe=False, status=200)
@@ -84,7 +82,7 @@ def update(request):
         body = json.loads(body_unicode)
 
         username = body['username']
-        token = body['token']
+        # token = body['token'] #################################
         character_info = body['character_info']
         query = {'token': token}
 
@@ -94,9 +92,9 @@ def update(request):
             }
             return JsonResponse(response_data, safe=False, status=400)
         else:
-            myquery = {"token": token}
+            myquery = {"username": username}
             new_values = {"$set": {"character_info": character_info}}
-            mongo_client['user_info']['info_collection'].update(myquery, new_values)
+            mongo_client['user_info']['info_collection'].update(myquery, new_values)  # 1 username <-> 1 char_info ??
             response_data = {
                 'message': 'ok'
             }
