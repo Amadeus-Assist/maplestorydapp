@@ -100,7 +100,17 @@ window.onload = function () {
         let myContract = new mcp.Contract(abi, '0x7afE6C2596A434AdB04802d103e6BCfe452864De')
         const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
-        const approveAmount = amount.toString() + "0000000000000000"
+        var decimal = amount.toString().split('.')
+        var count = 16
+        if (decimal.length > 1) {
+            count -= decimal[1].length
+        }
+        var zeros = ""
+        for (let i = 0; i < count; i++) {
+            zeros += "0"
+        }
+
+        const approveAmount = decimal[1] + zeros
 
         // console.log(approveAmount)
 
