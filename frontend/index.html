@@ -21,14 +21,15 @@
 		.login-btn{margin-right:10px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
 		.signup-btn{margin-left:10px;background:white; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:100px;text-align:center}
 		.login-btn2{margin-right:300px;background:white;font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;cursor: url("bg/cursor.png"), auto; bottom:50px;right:150px;text-align:center}
-		.logout-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 80px;left: 700px;}
+		.logout-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 120px;left: 700px;}
 		.connect-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 20px;left: 650px;}
-		.addfund-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 50px;left: 700px;}
+		.addfund-btn{position: absolute; font-size: 18px;font-weight: bold;font-family: liwen,微软雅黑;text-shadow: 0px 0px 5px #444;outline: none;background: white;border: none;cursor: url("bg/cursor.png"), auto;display: none;top: 20px;right: 50px;}
 		.logtext{text-align:center;margin:10px;}
 
 		.frame{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
 		.select-frame{top:50px;}
 		.frame-login{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
+		.frame-fund{width: 588px;position: absolute; margin-left:100px;font-family: liwen,微软雅黑;background: rgba(0, 0, 0, 0.6);border-radius: 8px;border: 1px solid orange;color:white;padding: 8px;font-size:14px;display: none;}
 		.text{font-weight: bold;font-size: 14px;text-shadow: 0px 0px 5px red;color:yellow;text-align: center;}
 		.character{width: 320px;margin: 10px auto;}
 		img{width: 60px; height: 96px;border-radius: 10px;padding: 30px;background:rgba(0, 0, 0, 0.6);box-shadow: 0 0 10px #000;transition: all 0.3s;margin-bottom:20px;}
@@ -55,15 +56,33 @@
 	<script src="script/map.js"></script>
 	<script src="script/bg.js"></script>
 	<script src="script/scene.js"></script>
-	<script src="script/main.js"></script>
+	<script src="script/services.js"></script>
+<!--	<script src="script/main.js" type="module"></script>-->
+	
+	<script src="script/abi.json"></script>
+<!--	<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>-->
+	<script src="dist/main.js"></script>
+
+<!--	<script src="dist/main.js"></script>-->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="script/vuex.js"></script>
+	<script src="script/store.js"></script>
+	<script src="script/plugin.js"></script>
+	<script src='https://cdn.jsdelivr.net/npm/bignumber.js@9.0.2/bignumber.min.js'></script> -->
+
 
 	<body onselectstart="return false;">
 		<audio id="home_audio" src="music/home.mp3" preload="true" loop="true"></audio>
 		<!--canvas - 鼠标图标可以移动的范围-->
 		<canvas id="canvas" width="800" height="600"></canvas>
 		<button class="connect-btn" id="connect_btn">Connect Wallet</button>
-		<button class="addfund-btn" id="addfund_btn">Add Fund</button>
-		<button class="logout-btn" id="logout_btn">Log  Out</button>
+		<div class = "frame-fund select-frame" id = "addfundclass">
+				<p class="logtext">Add Fund Amount <input type = "text" name ="name" id="addfundtext"></p>
+			<div align = "center">
+				<button class="addfund-btn" id="addfund_btn">Comfirm</button>
+			</div>
+		</div>
+		<button class="logout-btn" id="logout_btn">Log Out</button>
 		<div class="home" id="home">
 			<div class="version" id="version">Ver.20160215</div>
 			<!--要在这里加一个登陆界面-->
