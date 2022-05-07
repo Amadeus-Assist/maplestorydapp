@@ -143,12 +143,16 @@ window.onload = function () {
         xhr.onload = function (e) {
             if (this.status == 200) {
                 window.alert("Data Saved! You can close the window!");
+                location.reload();
+                window.switchUI("login");
+
             } else {
                 window.alert("Invalid Token. Please restart the game. Your record is not saved.");
             }
         };
         //send request
         xhr.send(data);
+
     }
 
     var canvas = $("canvas");
@@ -320,7 +324,7 @@ window.start = function (gender) {
         var bg_data = {x: 0, y: 0, res: window.resource.bg["bg"][map_basic_data.bg]};
 
         var scene_obj = {};
-        // 这里有backpack，equipment信息
+        // backpack + equipment
         scene_obj.music_src = map_basic_data.music_src;
         scene_obj.backpack = backpack;
         scene_obj.ability = ability;
@@ -345,28 +349,6 @@ window.start = function (gender) {
 
     function initSingle() {
         backpack = new Backpack();
-        // var newbackpack_equip = []
-        // var newempty_list_equip = []
-        // for (var i in this.newempty_list_equip) {
-        // 	for (var j = 0; j < 24; j++) {
-        // 		newbackpack_equip[i].push(null);
-        // 		newempty_list_equip[i].push(j);
-        // 	}
-        // }
-        // if (oldbackpack.length != 0) {
-        // 	for (i of oldbackpack){
-        // 		var pos = (newempty_list_equip.splice(0, 1))[0];
-        // 		//TODO: load in equipment + 属性
-        // 		var attack = i.attack;
-        // 		var defense = i.defense;
-        // 		var magic_defense = i.defense;
-        // 		var power_hit = i.power_hit;
-        // 		newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
-        // 	}
-        // 	backpack["装备"] = newbackpack_equip
-        // 	backpack.empty_list["装备"] = newempty_list_equip
-        // }
-
         ability = new Ability();
         equipment = new Equipment();
         ui = new UI();
@@ -421,6 +403,9 @@ window.start = function (gender) {
             if (this.status == 200) {
             } else {
                 window.alert("Invalid Token. Please and restart the game. Your record is not saved.");
+                location.reload();
+                window.switchUI("login");
+
             }
         };
         //send request
@@ -447,10 +432,17 @@ window.start = function (gender) {
         xhr.onload = function (e) {
             const data = JSON.parse(xhr.responseText);
             // console.log(game_scene.backpack.backpack)
-            console.log("equip data: "+xhr.responseText)
-            console.log(window.resource.things)
+            // console.log("equip data: "+xhr.responseText)
+            // console.log(window.resource.things)
             if (this.status == 200) {
                 pos = 0
+                //成功收到则初始化背包
+                game_scene.backpack.backpack["装备"] = []
+                for (var j = 0; j < 24; j++) {
+                    this.backpack["装备"].push(null);
+                }
+                    
+                //开始添加物品，based on current data from back end    
                 for (i of data.equipment_list) {
                     //TODO: load in equipment + 属性
                     var attack = i.attack;
@@ -458,11 +450,11 @@ window.start = function (gender) {
                     var magic_defense = i.magic_defense;
                     var power_hit = i.power_hit;
                     // console.log(game_scene.backpack.backpack)
-                    console.log(game_scene.backpack.empty_list)
-                    var posi = game_scene.backpack.empty_list["装备"].shift()
-                    console.log("insert pos: "+posi)
-                    game_scene.backpack.backpack["装备"][posi]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
-                    // newbackpack_equip.push(new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit))
+                    // console.log(game_scene.backpack.empty_list)
+                    // var posi = game_scene.backpack.empty_list["装备"].shift()
+                    // console.log("insert pos: "+posi)
+
+                    game_scene.backpack.backpack["装备"][pos]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
                     pos += 1
                 }
                 // console.log(newbackpack_equip)

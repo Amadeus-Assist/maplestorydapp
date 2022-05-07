@@ -300,7 +300,7 @@ function Backpack() {
 			this.backpack[i].push(null);
 			this.empty_list[i].push(j);
 		}
-		console.log(this.empty_list)
+		// console.log(this.empty_list)
 	}
 
 	this.checkCanAdd = function(thing) {
