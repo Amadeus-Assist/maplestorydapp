@@ -124,9 +124,11 @@ window.onload = function () {
             amount: approveAmount
         });
 
-        console.log(response)
-        // return response;
-        // window.addFund();
+        console.log("response="+response)
+        if (response) {
+            document.getElementById("addfundtext").value = "";
+            window.alert("Add fund successfully! Please pick up the equipment again!");
+        }
     }
     // sign up button
     $("signup_btn").onclick = function () {
@@ -397,30 +399,6 @@ window.start = function (gender) {
 
     function initSingle() {
         backpack = new Backpack();
-
-        var newbackpack_equip = []
-        var newempty_list_equip = []
-        for (var i in newempty_list_equip) {
-            for (var j = 0; j < 24; j++) {
-                newbackpack_equip[i].push(null);
-                newempty_list_equip[i].push(j);
-            }
-        }
-        if (oldbackpack.length != 0) {
-            for (i of oldbackpack) {
-                var pos = (newempty_list_equip.splice(0, 1))[0];
-                //TODO: load in equipment + 属性
-                var attack = i.attack;
-                var defense = i.defense;
-                var magic_defense = i.defense;
-                var power_hit = i.power_hit;
-                newbackpack_equip[pos] = new EquipmentItem(i.name, getRess(i.name), attack, defense, magic_defense, power_hit)
-            }
-            backpack["装备"] = newbackpack_equip
-            backpack.empty_list["装备"] = newempty_list_equip
-        }
-
-
         ability = new Ability();
         equipment = new Equipment();
         ui = new UI();
@@ -489,7 +467,7 @@ window.start = function (gender) {
 
 
     //every 5 min query for equipment - how to implement
-    this.query_equipment = setInterval(queryEquip(this.username, this.token), 3000)
+    setInterval(queryEquip(username, token), 3000)
 
     function queryEquip(username, token) {
         //TODO: update this backpack array to user's backpack
