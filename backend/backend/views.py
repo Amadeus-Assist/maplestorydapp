@@ -104,7 +104,7 @@ def logout(request):
             myquery = {"username": username}
             new_values = {"$set": {"character_info": character_info}}
             print("logout saved: ", character_info)
-            mongo_client['user_info']['info_collection'].update(myquery, new_values)  # 1 username <-> 1 char_info ??
+            mongo_client['user_info']['info_collection'].update_one(myquery, new_values)  # 1 username <-> 1 char_info ??
             response_data = {
                 'message': 'ok'
             }

@@ -97,10 +97,16 @@ function PlayerAttr(hp, mp, exp, level) {
 					   81494, 88013, 999999999];
 	this.max_hp = 50;
 	this.curr_hp = hp;
+	if (this.max_hp < this.curr_hp) {
+		this.max_hp = this.curr_hp
+	}
 	this.max_mp = 30;
 	this.curr_mp = mp;
+	if (this.max_mp < this.curr_mp) {
+		this.max_mp = this.curr_mp
+	}
 	this.curr_exp = exp;
-	this.max_exp = this.level_exp[0]; 
+	this.max_exp = this.level_exp[level]; 
 
 	this.money = 0;
 
