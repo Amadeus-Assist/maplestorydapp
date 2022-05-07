@@ -438,8 +438,11 @@ window.start = function (gender) {
                 pos = 0
                 //成功收到则初始化背包
                 game_scene.backpack.backpack["装备"] = []
+                game_scene.backpack.empty_list["装备"] = []
+
                 for (var j = 0; j < 24; j++) {
-                    this.backpack["装备"].push(null);
+                    game_scene.backpack.backpack["装备"].push(null);
+                    game_scene.backpack.empty_list["装备"].push(j);
                 }
                     
                 //开始添加物品，based on current data from back end    
@@ -451,10 +454,10 @@ window.start = function (gender) {
                     var power_hit = i.power_hit;
                     // console.log(game_scene.backpack.backpack)
                     // console.log(game_scene.backpack.empty_list)
-                    // var posi = game_scene.backpack.empty_list["装备"].shift()
+                    var posi = game_scene.backpack.empty_list["装备"].splice(0, 1)
                     // console.log("insert pos: "+posi)
 
-                    game_scene.backpack.backpack["装备"][pos]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
+                    game_scene.backpack.backpack["装备"][posi]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
                     pos += 1
                 }
                 // console.log(newbackpack_equip)
