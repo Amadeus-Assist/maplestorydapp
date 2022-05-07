@@ -15,7 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/maplestorydapp/admin/', admin.site.urls),
+    path('api/maplestorydapp/login/', views.login),
+    path('api/maplestorydapp/index/', views.index),
+    path('api/maplestorydapp/register/', views.register),
+    path('api/maplestorydapp/logout/', views.logout),
+    path('api/maplestorydapp/update/', views.update),
+    path('api/maplestorydapp/pick_equipment/', views.pick_equipment),
+    path('api/maplestorydapp/add_balance/', views.add_balance),
+    path('api/maplestorydapp/query_equipment/', views.query_equipment),
 ]

@@ -300,6 +300,7 @@ function Backpack() {
 			this.backpack[i].push(null);
 			this.empty_list[i].push(j);
 		}
+		// console.log(this.empty_list)
 	}
 
 	this.checkCanAdd = function(thing) {
@@ -347,10 +348,11 @@ function Backpack() {
 			case 1:
 				var equip = thing.name;
 				//empty list减少 TODO: check whether need to splice here or later in the update equipment part
-				// this.empty_list["装备"].splice(0, 1)
+				this.empty_list["装备"].splice(0, 1)
 				//new object
+				console.log(this.empty_list)
 				var xhr = new XMLHttpRequest();
-				var url = 'http://localhost:8080/api/maplestorydapp/pick_equipment';
+				var url = 'http://localhost:8000/api/maplestorydapp/pick_equipment/';
 				//POST
 				xhr.open("POST", url, true);
 				//设置请求头的Content-Type
