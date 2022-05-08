@@ -54,6 +54,9 @@ contract MaplestoryDappNFT is ERC721 {
         equipments.push(_initEmptyEquipment);
     }
 
+    event SuccessCreateNFT(uint256 id, address receiver, string name, uint256 attack, uint256 defense, uint256
+    magic_defense, uint256 power_hit, uint256 drop_time);
+
     // Create a function to mint/create the NFT
     // receiver takes a type of address. This is the wallet address of the user that should receive the NFT minted using the smart contract
     // tokenURI takes a string that contains metadata about the NFT
@@ -87,6 +90,8 @@ contract MaplestoryDappNFT is ERC721 {
         deposit[receiver] -= cost;
         _safeMint(receiver, newEquipmentId);
         //        _setTokenURI(newItemId, tokenURI);
+
+        emit SuccessCreateNFT(newEquipmentId, receiver, name, attack, defense, magic_defense, power_hit, drop_time);
 
         // returns the id for the newly created token
         return newEquipmentId;
@@ -220,7 +225,7 @@ contract MaplestoryDappNFT is ERC721 {
 
     event DiscardEquipment(uint256 tokenId, address owner);
 
-    function discardEquipment(uint256 _id) public{
+    function discardEquipment(uint256 _id) public {
         require(tokenIdToOnSell[_id].seller == address(0), "equipment on sell");
         require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
 
