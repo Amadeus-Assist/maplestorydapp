@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/maplestorydapp/update/', views.update),
     path('api/maplestorydapp/pick_equipment/', views.pick_equipment),
     path('api/maplestorydapp/query_equipment/', views.query_equipment),
+    path('api/maplestorydapp/check_add/', views.check_add)
 ]
