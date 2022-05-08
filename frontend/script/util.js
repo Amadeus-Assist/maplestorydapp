@@ -308,7 +308,43 @@ function Backpack() {
 			case 1:
 				// 没有空位就无法捡
 				if (this.empty_list["装备"].length == 0) return false;
+				var equip = thing.name;
+				//empty list减少 TODO: check whether need to splice here or later in the update equipment part
+				//new object
+				// console.log(this.empty_list)
+				var xhr = new XMLHttpRequest();
+				var url = 'http://localhost:8000/api/maplestorydapp/check_balance/';
+				//POST
+				xhr.open("POST", url, true);
+				//设置请求头的Content-Type
+				xhr.setRequestHeader("Content-Type", "application/json");
+				//请求数据
+				var data = JSON.stringify({"equipment_name":equip, "username":username, "token":token});
+				//when request completes
+				xhr.onload = function(e){
+					const data = JSON.parse(xhr.responseText);
+					if (this.status == 200) {
+							 
+					}else{
+						if (data.message == "insufficient fund") {
+							var balance = data.balance
+							var alertmsg = "You have insufficient fund. Current balance is " + balance + ". Please add fund. "
+							window.alert(alertmsg);
+							return false;
+							// TODO: check the equipment is not actually picked up. It's still on the ground.
+							//需要充钱 
+							// this.addFund();
+						} else {
+							window.alert("Invalid Token. Please restart the game. Your record is not saved.");
+							location.reload()
+							switchUI("login")
+						}	
+					}
+				};
+				//send request
+				xhr.send(data);
 				break;
+
 			case 2:
 				for (var i in this.backpack["消耗"]) {
 					if (this.backpack["消耗"][i] != null && this.backpack["消耗"][i].name == thing.name 
@@ -346,43 +382,8 @@ function Backpack() {
 	this.add = function(thing, username, token) {
 		switch(thing.type) {
 			case 1:
-				var equip = thing.name;
 				//empty list减少 TODO: check whether need to splice here or later in the update equipment part
 				this.empty_list["装备"].splice(0, 1)
-				//new object
-				console.log(this.empty_list)
-				var xhr = new XMLHttpRequest();
-				var url = 'http://localhost:8000/api/maplestorydapp/pick_equipment/';
-				//POST
-				xhr.open("POST", url, true);
-				//设置请求头的Content-Type
-				xhr.setRequestHeader("Content-Type", "application/json");
-				//请求数据
-				var data = JSON.stringify({"equipment_name":equip, "username":username, "token":token});
-				//when request completes
-				xhr.onload = function(e){
-					const data = JSON.parse(xhr.responseText);
-					if (this.status == 200) {
-
-					}else{
-						if (data.message == "insufficient fund") {
-							var balance = data.balance
-							var alertmsg = "You have insufficient fund. Current balance is " + balance + ". Please add fund. "
-							window.alert(alertmsg);
-							// TODO: check the equipment is not actually picked up. It's still on the ground.
-							//需要充钱 
-							// this.addFund();
-						} else {
-							window.alert("Invalid Token. Please restart the game. Your record is not saved.");
-						}	
-					}
-				};
-				//send request
-				xhr.send(data);
-				
-				//背包里不加入装备目前
-			
-				
 				break;
 			case 2:
 				if (this.consumable_pos != -1) {
