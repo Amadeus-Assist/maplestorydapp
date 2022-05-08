@@ -313,7 +313,7 @@ function Backpack() {
 				//new object
 				// console.log(this.empty_list)
 				var xhr = new XMLHttpRequest();
-				var url = 'http://localhost:8000/api/maplestorydapp/check_balance/';
+				var url = 'http://localhost:8000/api/maplestorydapp/pick_equipment/';
 				//POST
 				xhr.open("POST", url, true);
 				//设置请求头的Content-Type
