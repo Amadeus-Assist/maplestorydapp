@@ -89,22 +89,16 @@ function SkillsAttr() {
 	}
 }
 
-function PlayerAttr(hp, mp, exp, level) {
+function PlayerAttr(hp, mp, exp, level, strr=4, dex=4, intt=4, luk=4, defense=0, magic_defense=0, max_hp = 50, max_mp = 30, point=0) {
 	this.level = level;
 	this.level_exp = [15, 34, 57, 92, 135, 372, 560, 840, 1242, 1490, 1788, 2145, 2574, 
 					   3088, 3705, 4446, 5335, 6402, 7682, 9218, 11061, 13273, 15927, 19112,
 					   22934, 27520, 33024, 39628, 47553, 51357, 55465, 59902, 64694, 69869, 75458,
 					   81494, 88013, 999999999];
-	this.max_hp = 50;
+	this.max_hp = max_hp;
 	this.curr_hp = hp;
-	if (this.max_hp < this.curr_hp) {
-		this.max_hp = this.curr_hp
-	}
-	this.max_mp = 30;
+	this.max_mp = max_mp;
 	this.curr_mp = mp;
-	if (this.max_mp < this.curr_mp) {
-		this.max_mp = this.curr_mp
-	}
 	this.curr_exp = exp;
 	this.max_exp = this.level_exp[level]; 
 
@@ -134,11 +128,11 @@ function PlayerAttr(hp, mp, exp, level) {
 		this.magic_defense = magic_defense + (this.level - 1) * 3 + (this.DEX - 4) * 2 + (this.INT - 4) * 4;
 	}
 
-	this.point = 0;
-	this.STR = 4;
-	this.DEX = 4;
-	this.INT = 4;
-	this.LUK = 4;
+	this.point = point;
+	this.STR = strr;
+	this.DEX = dex;
+	this.INT = intt;
+	this.LUK = luk;
 
 	this.basic_attack = 10;
 	this.weapon_up_fix = 1.0;
@@ -148,8 +142,8 @@ function PlayerAttr(hp, mp, exp, level) {
 	this.max_attack;
 	this.min_attack;
 	this.power_hit = 0;
-	this.defense = 0;
-	this.magic_defense = 0;
+	this.defense = defense;
+	this.magic_defense = magic_defense;
 
 	this.basic_power_hit = 0.2;
 	this.basic_defense = 1;

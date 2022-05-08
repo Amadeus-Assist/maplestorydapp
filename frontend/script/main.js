@@ -73,9 +73,18 @@ window.onload = function () {
                 oldexp = oldcharacter.exp
                 level = oldcharacter.level
                 oldbackpack = oldcharacter.equipment
+                var point = oldcharacter.point
+                var strr = oldcharacter.str
+                var dex = oldcharacter.dex
+                var intt = oldcharacter.int
+                var luk = oldcharacter.luk
+                var defense = oldcharacter.defense
+                var magic_defense = oldcharacter.magic_defense
+                var max_hp = oldcharacter.max_hp
+                var max_mp = oldcharacter.max_mp
                 if (Object.keys(oldcharacter).length !== 0) {
                     console.log("get here")
-                    window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level);
+                    window.player_attr = new PlayerAttr(oldhp, oldmp, oldexp, level, strr, dex, intt, luk, defense, magic_defense, max_hp, max_mp, point);
                 }
 
                 window.switchlogin("select", "login");
@@ -173,7 +182,16 @@ window.onload = function () {
             'hp': window.player_attr.curr_hp,
             'mp': window.player_attr.curr_mp,
             'exp': window.player_attr.curr_exp,
-            'level': window.player_attr.level
+            'level': window.player_attr.level,
+            'point': window.player_attr.point,
+            'str': window.player_attr.STR,
+            'dex': window.player_attr.DEX,
+            'int': window.player_attr.INT,
+            'luk': window.player_attr.LUK,
+            'defense': window.player_attr.defense,
+            'magic_defense': window.player_attr.magic_defense,
+            'max_hp': window.player_attr.max_hp,
+            'max_mp': window.player_attr.max_mp,
         }
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/logout/';
@@ -434,12 +452,21 @@ window.start = function (gender) {
 
     function updateInfo(username, token) {
         //every 1 min update character info
+        console.log("update user info begins")
         var characterInfo = {
-
             'hp': window.player_attr.curr_hp,
             'mp': window.player_attr.curr_mp,
             'exp': window.player_attr.curr_exp,
-            'level': window.player_attr.level
+            'level': window.player_attr.level,
+            'point': window.player_attr.point,
+            'str': window.player_attr.STR,
+            'dex': window.player_attr.DEX,
+            'int': window.player_attr.INT,
+            'luk': window.player_attr.LUK,
+            'defense': window.player_attr.defense,
+            'magic_defense': window.player_attr.magic_defense,
+            'max_hp': window.player_attr.max_hp,
+            'max_mp': window.player_attr.max_mp,
         }
         console.log("chara_info: "+JSON.stringify(characterInfo, null, 4))
         var xhr = new XMLHttpRequest();
@@ -471,7 +498,6 @@ window.start = function (gender) {
 
     function queryEquip(username, token) {
         //TODO: update this backpack array to user's backpack
-        var newbackpack_equip = [];
 
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/query_equipment/';
@@ -485,9 +511,8 @@ window.start = function (gender) {
         //when request completes
         xhr.onload = function (e) {
             const data = JSON.parse(xhr.responseText);
-
             // console.log(game_scene.backpack.backpack)
-            // console.log("equip data: "+xhr.responseText)
+            console.log("equip data: "+xhr.responseText)
             // console.log(window.resource.things)
             if (this.status == 200) {
                 pos = 0
