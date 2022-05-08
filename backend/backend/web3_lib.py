@@ -12,7 +12,7 @@ receiver_address = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
 maple_contract = w3.eth.contract(address=contract_address, abi=abi)
 
-#EquipMenu = ['Name:','ATK','DEF','MAG','POW','ToD','state']
+# EquipMenu = ['Name:','ATK','DEF','MAG','POW','ToD','state']
 
 
 def marketMenu():
@@ -29,9 +29,11 @@ def marketMenu():
     print("Total Supply Number:", TotalNum)
     print(marketList)
 
+
 def selfBalance(receiver_address):
     Account_remain = maple_contract.functions.getDeposit(receiver_address).call()
     print("Account Balance:", Account_remain)
+    return Account_remain
 
 
 def selfNFT(receiver_address):
