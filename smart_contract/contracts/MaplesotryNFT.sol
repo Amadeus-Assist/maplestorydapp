@@ -31,7 +31,7 @@ contract MaplestoryDappNFT is ERC721 {
 
     struct OnSell {
         address seller;
-        uint128 price;
+        uint256 price;
     }
 
     // @dev Access modifier for operator-only functionality
@@ -125,7 +125,9 @@ contract MaplestoryDappNFT is ERC721 {
         uint32 magic_defense,
         uint32 power_hit,
         uint32 drop_time,
-        bool onSell
+        bool onSell,
+        uint256 price,
+        address seller
     ){
         Equipment storage equipment = equipments[_id];
         name = equipment.name;
@@ -135,6 +137,8 @@ contract MaplestoryDappNFT is ERC721 {
         power_hit = equipment.power_hit;
         drop_time = equipment.drop_time;
         onSell = tokenIdToOnSell[_id].seller != address(0);
+        price = tokenIdToOnSell[_id].price;
+        seller = tokenIdToOnSell[_id].seller;
     }
 
     event SuccessDeposit(uint256 amount, address receiver, address sender);
@@ -154,13 +158,12 @@ contract MaplestoryDappNFT is ERC721 {
     event CancelOnSell(uint256 tokenId, uint256 price, address seller);
 
     function sellEquipment(uint256 _id, uint256 price) public {
-        require(price == uint256(uint128(price)));
         require(tokenIdToOnSell[_id].seller == address(0), "equipment already on sell");
         require(ownerOf(_id) == msg.sender, "only owner can sell his equipment");
 
         OnSell memory _newOnSell = OnSell({
         seller : msg.sender,
-        price : uint128(price)
+        price : price
         });
         tokenIdToOnSell[_id] = _newOnSell;
         totalOnSell++;
@@ -168,14 +171,13 @@ contract MaplestoryDappNFT is ERC721 {
     }
 
     function purchaseEquipment(uint256 _id) payable public {
-        require(msg.value == uint256(uint128(msg.value)));
         require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
         require(msg.value >= tokenIdToOnSell[_id].price, "insufficient money");
 
-        uint128 price = tokenIdToOnSell[_id].price;
+        uint256 price = tokenIdToOnSell[_id].price;
         address payable seller = payable(tokenIdToOnSell[_id].seller);
         address payable buyer = payable(msg.sender);
-        uint128 excessMoney = uint128(msg.value) - price;
+        uint256 excessMoney = msg.value - price;
 
         require(seller.send(price));
         require(buyer.send(excessMoney));
@@ -190,7 +192,7 @@ contract MaplestoryDappNFT is ERC721 {
         require(tokenIdToOnSell[_id].seller != address(0), "equipment not on sell");
         require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
 
-        uint128 price = tokenIdToOnSell[_id].price;
+        uint256 price = tokenIdToOnSell[_id].price;
         delete tokenIdToOnSell[_id];
         totalOnSell--;
         emit CancelOnSell(_id, price, msg.sender);
@@ -214,5 +216,15 @@ contract MaplestoryDappNFT is ERC721 {
             }
             return result;
         }
+    }
+
+    event DiscardEquipment(uint256 tokenId, address owner);
+
+    function discardEquipment(uint256 _id) public{
+        require(tokenIdToOnSell[_id].seller == address(0), "equipment on sell");
+        require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
+
+        _safeTransfer(msg.sender, operatorAddress, _id, "");
+        emit DiscardEquipment(_id, msg.sender);
     }
 }
