@@ -8,8 +8,13 @@ from . import web3_lib
 
 import pymongo
 import random
+import time
 
 token_dict = {}
+gas = 154819
+gas_price = 50 * (10 ** 9)
+cost = int(gas * gas_price * 1.5)
+
 
 def login(request):
     """Handle user login"""
@@ -35,7 +40,7 @@ def login(request):
                 character_info = query_result['character_info']
             else:
                 character_info = ""
-             # if ('character_info' in query_result) else ""
+            # if ('character_info' in query_result) else ""
             # print("chara_info: "+query_result['character_info'])
             token = random.randint(1, 2000)  # 生成随机数
             token_dict[username] = token
@@ -69,8 +74,8 @@ def register(request):
         query2 = {'bundle_address': bundle_address}
         print(body)
 
-        if mongo_client['user_info']['info_collection'].find_one(query1) or mongo_client['user_info'][
-            'info_collection'].find_one(query2):
+        if mongo_client['user_info']['info_collection'].find_one(query1) \
+                or mongo_client['user_info']['info_collection'].find_one(query2):
             return HttpResponseBadRequest("Duplicate register info.")
         else:
             insert_data = {
@@ -78,6 +83,10 @@ def register(request):
                 'password': password,
                 'bundle_address': bundle_address
             }
+
+            if not insert_data['password']:
+                return HttpResponseBadRequest("Please enter a password.")
+
             mongo_client['user_info']['info_collection'].insert_one(insert_data)
             response_data = {
                 'message': 'ok'
@@ -136,14 +145,255 @@ def update(request):
             return JsonResponse(response_data, safe=False, status=200)
 
 
+# def pick_equipment(request):
+#     """Handle picking equipment and putting it into the Blockchain"""
+#
+#     if request.method == 'POST':
+#         body_unicode = request.body.decode('utf-8')
+#         body = json.loads(body_unicode)
+#         print(body)
+#
+#         username = body['username']
+#         equipment = body['equipment']
+#         token = body['token']
+#
+#         if username not in token_dict or token != token_dict[username]:
+#             return HttpResponseBadRequest('Invalid token')
+#
+#         equipment_attribute = {}
+#
+#         if equipment == 'qingmeng':
+#             attack = 0
+#             power_hit = 0
+#             defense = random.randint(20, 100)
+#             magic_defense = random.randint(20, 100)
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#
+#         elif equipment == 'heitangshan':
+#             attack = 0
+#             power_hit = 0
+#             defense = random.randint(50, 200)
+#             magic_defense = random.randint(50, 200)
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#
+#         elif equipment == 'guahudao':
+#             attack = random.randint(10, 50)
+#             power_hit = random.randint(0, 10)
+#             defense = 0
+#             magic_defense = 0
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#
+#         elif equipment == 'fengyeren':
+#             attack = random.randint(30, 100)
+#             power_hit = random.randint(5, 25)
+#             defense = 0
+#             magic_defense = 0
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#
+#         elif equipment == 'shuangyiren':
+#             attack = random.randint(70, 150)
+#             power_hit = random.randint(15, 50)
+#             defense = 0
+#             magic_defense = 0
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#         elif equipment == 'fenghuangren':
+#             attack = random.randint(120, 220)
+#             power_hit = random.randint(40, 100)
+#             defense = 0
+#             magic_defense = 0
+#             drop_time = time.time()
+#             equipment_attribute = {
+#                 "attack": attack,
+#                 "power_hit": power_hit,
+#                 "defense": defense,
+#                 "magic_defense": magic_defense,
+#                 "drop_time": drop_time
+#             }
+#
+#         response_data = equipment_attribute
+#         return JsonResponse(response_data, safe=False, status=200)
+
+
+# def add_balance(request):
+#     """Handle adding balance to the Blockchain system"""
+#     pass
+
+
 def pick_equipment(request):
-    """Handle picking equipment and putting it into the Blockchain"""
-    pass
+    """
+    Handle querying current balance using bundle_address.
+    Give random attributes for different equipments.
+    Call createNFT for enough current balance.
+    """
 
+    def get_equipment(equipment):
 
-def add_balance(request):
-    """Handle adding balance to the Blockchain system"""
-    pass
+        if equipment == 'qingmeng':
+            attack = 0
+            power_hit = 0
+            defense = random.randint(20, 100)
+            magic_defense = random.randint(20, 100)
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+
+        elif equipment == 'heitangshan':
+            attack = 0
+            power_hit = 0
+            defense = random.randint(50, 200)
+            magic_defense = random.randint(50, 200)
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+
+        elif equipment == 'guahudao':
+            attack = random.randint(10, 50)
+            power_hit = random.randint(0, 10)
+            defense = 0
+            magic_defense = 0
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+
+        elif equipment == 'fengyeren':
+            attack = random.randint(30, 100)
+            power_hit = random.randint(5, 25)
+            defense = 0
+            magic_defense = 0
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+
+        elif equipment == 'shuangyiren':
+            attack = random.randint(70, 150)
+            power_hit = random.randint(15, 50)
+            defense = 0
+            magic_defense = 0
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+        elif equipment == 'fenghuangren':
+            attack = random.randint(120, 220)
+            power_hit = random.randint(40, 100)
+            defense = 0
+            magic_defense = 0
+            drop_time = time.time()
+            equipment_attribute = {
+                "attack": attack,
+                "power_hit": power_hit,
+                "defense": defense,
+                "magic_defense": magic_defense,
+                "drop_time": drop_time
+            }
+
+        return equipment_attribute
+
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        print(body)
+
+        username = body['username']
+        token = body['token']
+        equipment = body['equipment']
+
+        if username not in token_dict or token != token_dict[username]:
+            return HttpResponseBadRequest('Invalid token')
+
+        mongo_client = mongodb.get_client()
+        query = {'username': username}
+        query_result = mongo_client['user_info']['info_collection'].find_one(query)
+        print(query_result)
+        if not query_result:
+            return HttpResponseBadRequest("Invalid login info")
+
+        bundle_address = query_result['bundle_address']
+        current_balance = web3_lib.selfBalance(bundle_address)
+
+        if current_balance < cost:
+            return HttpResponseBadRequest(f'Not enough balance. Current balance is {current_balance}.')
+        else:
+            attributes = get_equipment(equipment)
+            result = web3_lib.createNFT(
+                receiver=bundle_address,
+                name=username,
+                attack=attributes['attack'],
+                defense=attributes['defense'],
+                magic_defense=attributes['magic_defense'],
+                power_hit=attributes['power_hit'],
+                drop_time=attributes['drop_time'],
+                cost=cost,
+                gas=gas,
+                gas_price=gas_price
+            )
+
+            if result:
+                response_data = {
+                    'message': "ok"
+                }
+                return JsonResponse(response_data, safe=False, status=200)
+            else:
+                return HttpResponseBadRequest("Failed to create NFT")
 
 
 def query_equipment(request):
