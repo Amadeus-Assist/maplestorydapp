@@ -112,7 +112,7 @@ window.onload = function () {
         }
         let mcp = new Mcp(options)
         mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-        let myContract = new mcp.Contract(abi, '0xE5cc15DA563e9674E4CA8199465e50b1d4713595')
+        let myContract = new mcp.Contract(abi, '0xcd55c2b7E1A4273876353DB9f780a56b6d139374')
         const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
         var decimal = amount.toString().split('.')
