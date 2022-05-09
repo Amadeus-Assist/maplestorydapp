@@ -131,4 +131,4 @@ dmypy.json
 smart_contract/artifacts
 smart_contract/cache
 
-*/password.py
+**/password.py
