@@ -13,8 +13,8 @@ var oldmp = 30;
 var oldexp = 0;
 var oldbackpack = [];
 var level = 1;
-var token = "";
-var username = ""
+window.token = "";
+window.username = ""
 
 window.resource = new Resource();
 window.music_manager = new MusicManager();
@@ -53,13 +53,13 @@ window.onload = function () {
     }
     //log in button
     $("login_btn").onclick = function () {
-        username = document.getElementById("username").value;
+        window.username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
         var xhr = new XMLHttpRequest();
         var url = "http://localhost:8000/api/maplestorydapp/login/";
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
-        var data = JSON.stringify({"username": username, "password": password});
+        var data = JSON.stringify({"username": window.username, "password": password});
         xhr.onload = function (e) {
             if (this.status == 200) {
                 //TODO: load character info
@@ -67,7 +67,7 @@ window.onload = function () {
                 var jsonResponse = JSON.parse(text);
                 var oldcharacter = jsonResponse.character_info
                 console.log(oldcharacter)
-                token = jsonResponse.token
+                window.token = jsonResponse.token
                 oldhp = oldcharacter.hp
                 oldmp = oldcharacter.mp
                 oldexp = oldcharacter.exp
@@ -102,6 +102,7 @@ window.onload = function () {
     }
     $("addfund_btn").onclick = async function () {
         var amount = document.getElementById("addfundtext").value;
+        console.log("amount: " + amount)
         const provider = window["aleereum"]
         const account = provider.account
         // let Mcp = require("../mcp.js");
@@ -111,7 +112,7 @@ window.onload = function () {
         }
         let mcp = new Mcp(options)
         mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-        let myContract = new mcp.Contract(abi, '0x7afE6C2596A434AdB04802d103e6BCfe452864De')
+        let myContract = new mcp.Contract(abi, '0xE5cc15DA563e9674E4CA8199465e50b1d4713595')
         const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
         var decimal = amount.toString().split('.')
@@ -124,16 +125,16 @@ window.onload = function () {
             zeros += "0"
         }
 
-        const approveAmount = decimal[1] + zeros
+        const approveAmount = decimal[0] + (decimal[1] ? decimal[1] : "") + zeros
 
         // console.log(approveAmount)
 
-        const  response = await myContract.methods.depositMoney(receiver).sendToBlock({
+        const response = await myContract.methods.depositMoney(receiver).sendToBlock({
             from: account,
             amount: approveAmount
         });
 
-        console.log("response="+response)
+        console.log("response=" + response)
         if (response) {
             document.getElementById("addfundtext").value = "";
             window.alert("Add fund successfully! Please pick up the equipment again!");
@@ -196,12 +197,16 @@ window.onload = function () {
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/logout/';
 
-       //POST
+        //POST
         xhr.open("POST", url, true);
         //设置请求头的Content-Type
         xhr.setRequestHeader("Content-Type", "application/json");
         //请求数据
-        var data = JSON.stringify({"username": username, "token": token, "character_info": characterInfo});
+        var data = JSON.stringify({
+            "username": window.username,
+            "token": window.token,
+            "character_info": characterInfo
+        });
         //when request completes
         xhr.onload = function (e) {
             if (this.status == 200) {
@@ -266,31 +271,31 @@ window.switchlogin = function (e_id, last_id) {
     }
 }
 
-window.addFund = function () {
-    var username = "";
-    var token = "";
-    var value = 0;
-    var xhr = new XMLHttpRequest();
-    var url = 'http://localhost:8000/api/maplestorydapp/add_balance/';
-
-    //POST
-    xhr.open("POST", url, true);
-    //设置请求头的Content-Type
-    xhr.setRequestHeader("Content-Type", "application/json");
-    //请求数据
-    var data = JSON.stringify({"value": value, "username": username, "token": token});
-    //when request completes
-    xhr.onload = function (e) {
-
-        if (this.status == 200) {
-            window.alert("Addiing fund successfully!");
-        } else {
-            window.alert("Addiing fund Failed, please try again.");
-        }
-    };
-    //send request
-    xhr.send(data);
-}
+// window.addFund = function () {
+//     var username = "";
+//     var token = "";
+//     var value = 0;
+//     var xhr = new XMLHttpRequest();
+//     var url = 'http://localhost:8000/api/maplestorydapp/add_balance/';
+//
+//     //POST
+//     xhr.open("POST", url, true);
+//     //设置请求头的Content-Type
+//     xhr.setRequestHeader("Content-Type", "application/json");
+//     //请求数据
+//     var data = JSON.stringify({"value": value, "username": username, "token": token});
+//     //when request completes
+//     xhr.onload = function (e) {
+//
+//         if (this.status == 200) {
+//             window.alert("Addiing fund successfully!");
+//         } else {
+//             window.alert("Addiing fund Failed, please try again.");
+//         }
+//     };
+//     //send request
+//     xhr.send(data);
+// }
 // start函数定义，选择角色
 window.start = function (gender) {
     var e = $("logout_btn")
@@ -378,6 +383,7 @@ window.start = function (gender) {
         if (game_scene.is_finish) {
             game_scene = new GameScene(getGameData(game_scene.next_map), ctx);
         }
+        // console.log("trigger interval")
         game_scene.update();
     }, 1000 / window.FPS, false);
 
@@ -390,7 +396,7 @@ window.start = function (gender) {
         var bg_data = {x: 0, y: 0, res: window.resource.bg["bg"][map_basic_data.bg]};
 
         var scene_obj = {};
-      
+
         // backpack + equipment
 
         scene_obj.music_src = map_basic_data.music_src;
@@ -401,8 +407,8 @@ window.start = function (gender) {
         scene_obj.player = player;
         scene_obj.map = new Map(map_data);
         scene_obj.bg = new Bg(bg_data);
-        scene_obj.username = username;
-        scene_obj.token = token;
+        scene_obj.username = window.username;
+        scene_obj.token = window.token;
 
 
         scene_obj.is_open_ability_window = map_basic_data.is_open_ability_window;
@@ -447,12 +453,15 @@ window.start = function (gender) {
 
     //600ms
 
-    setInterval(updateInfo(username, token), 600)
+    setInterval(function () {
+        updateInfo(window.username, window.token)
+    }, 10000)
 
+    // clearInterval(updateInterval)
 
-    function updateInfo(username, token) {
+    async function updateInfo(username, token) {
         //every 1 min update character info
-        console.log("update user info begins")
+        // console.log("update user info begins")
         var characterInfo = {
             'hp': window.player_attr.curr_hp,
             'mp': window.player_attr.curr_mp,
@@ -468,7 +477,7 @@ window.start = function (gender) {
             'max_hp': window.player_attr.max_hp,
             'max_mp': window.player_attr.max_mp,
         }
-        console.log("chara_info: "+JSON.stringify(characterInfo, null, 4))
+        // console.log("chara_info: "+JSON.stringify(characterInfo, null, 4))
         var xhr = new XMLHttpRequest();
         var url = 'http://localhost:8000/api/maplestorydapp/update/';
 
@@ -492,11 +501,12 @@ window.start = function (gender) {
         xhr.send(data);
     }
 
-
     //every 5 min query for equipment - how to implement
-    setInterval(queryEquip(username, token), 3000)
+    setInterval(function () {
+        queryEquip(window.username, window.token)
+    }, 5000)
 
-    function queryEquip(username, token) {
+    async function queryEquip(username, token) {
         //TODO: update this backpack array to user's backpack
 
         var xhr = new XMLHttpRequest();
@@ -512,10 +522,9 @@ window.start = function (gender) {
         xhr.onload = function (e) {
             const data = JSON.parse(xhr.responseText);
             // console.log(game_scene.backpack.backpack)
-            console.log("equip data: "+xhr.responseText)
+            console.log("equip data: " + xhr.responseText)
             // console.log(window.resource.things)
             if (this.status == 200) {
-                pos = 0
                 //成功收到则初始化背包
                 game_scene.backpack.backpack["装备"] = []
                 game_scene.backpack.empty_list["装备"] = []
@@ -524,23 +533,48 @@ window.start = function (gender) {
                     game_scene.backpack.backpack["装备"].push(null);
                     game_scene.backpack.empty_list["装备"].push(j);
                 }
-                    
+
+                var stillHaveWeapon = false
+                var stillHaveCloth = false
+
                 //开始添加物品，based on current data from back end    
-                for (i of data.equipment_list) {
+                for (var i of data.equipment_list) {
                     //TODO: load in equipment + 属性
                     var attack = i.attack;
                     var defense = i.defense;
                     var magic_defense = i.magic_defense;
-                    var power_hit = i.power_hit;
+                    var power_hit = (i.power_hit) / 100.0;
+                    var equip_id = i.id;
+                    console.log("id: " + equip_id)
                     // console.log(game_scene.backpack.backpack)
                     // console.log(game_scene.backpack.empty_list)
                     var posi = game_scene.backpack.empty_list["装备"].splice(0, 1)
                     // console.log("insert pos: "+posi)
 
-                    game_scene.backpack.backpack["装备"][posi]=new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit)
-                    pos += 1
+                    console.log("attack: " + attack);
+
+                    if (window.player_attr.weapon && window.player_attr.weapon["id"] === equip_id) {
+                        stillHaveWeapon = true
+                        continue;
+                    }
+
+                    if (window.player_attr.clothes && window.player_attr.clothes["id"] === equip_id) {
+                        stillHaveCloth = true
+                        continue;
+                    }
+
+                    game_scene.backpack.backpack["装备"][posi] = new EquipmentItem(i.name, new Animation(getRess(i.name), 1000, 0).getCurrFrame(), attack, defense, magic_defense, power_hit, equip_id)
+                }
+                if (!stillHaveWeapon) {
+                    window.player_attr.weapon = null;
+                    game_scene.equipment.weapon = null;
+                }
+                if(!stillHaveCloth){
+                    window.player_attr.clothes = null;
+                    game_scene.equipment.clothes = null;
                 }
                 // console.log(newbackpack_equip)
+                console.log(window.player_attr)
                 console.log(game_scene)
                 game_scene.draw();
             } else {

@@ -12,8 +12,17 @@ import time
 
 token_dict = {}
 gas = 154819
-gas_price = 50 * (10 ** 9)
+gas_price = 50 * (10 ** 6)
 cost = int(gas * gas_price * 1.5)
+
+equipment_name_mapping = {
+    '青梦': 'qingmeng',
+    '黑唐衫': 'heitangshan',
+    '刮胡刀': 'guahudao',
+    '凤凰刃': 'fenghuangren',
+    '双翼刃': 'shuangyiren',
+    '枫叶刃': 'fengyeren',
+}
 
 
 def login(request):
@@ -263,88 +272,74 @@ def pick_equipment(request):
 
     def get_equipment(equipment):
 
+        equipment_attribute = {}
+        drop_time = int(time.time())
+
         if equipment == 'qingmeng':
             attack = 0
             power_hit = 0
             defense = random.randint(20, 100)
             magic_defense = random.randint(20, 100)
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
 
         elif equipment == 'heitangshan':
             attack = 0
             power_hit = 0
             defense = random.randint(50, 200)
             magic_defense = random.randint(50, 200)
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
 
         elif equipment == 'guahudao':
             attack = random.randint(10, 50)
             power_hit = random.randint(0, 10)
             defense = 0
             magic_defense = 0
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
 
         elif equipment == 'fengyeren':
             attack = random.randint(30, 100)
             power_hit = random.randint(5, 25)
             defense = 0
             magic_defense = 0
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
 
         elif equipment == 'shuangyiren':
             attack = random.randint(70, 150)
             power_hit = random.randint(15, 50)
             defense = 0
             magic_defense = 0
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
+
         elif equipment == 'fenghuangren':
             attack = random.randint(120, 220)
             power_hit = random.randint(40, 100)
             defense = 0
             magic_defense = 0
-            drop_time = time.time()
-            equipment_attribute = {
-                "attack": attack,
-                "power_hit": power_hit,
-                "defense": defense,
-                "magic_defense": magic_defense,
-                "drop_time": drop_time
-            }
+            equipment_attribute['attack'] = attack
+            equipment_attribute['power_hit'] = power_hit
+            equipment_attribute['defense'] = defense
+            equipment_attribute['magic_defense'] = magic_defense
+            equipment_attribute['drop_time'] = drop_time
 
         return equipment_attribute
 
@@ -355,7 +350,7 @@ def pick_equipment(request):
 
         username = body['username']
         token = body['token']
-        equipment = body['equipment']
+        equipment = equipment_name_mapping[body['equipment_name']]
 
         if username not in token_dict or token != token_dict[username]:
             return HttpResponseBadRequest('Invalid token')
@@ -371,16 +366,19 @@ def pick_equipment(request):
         current_balance = web3_lib.selfBalance(bundle_address)
 
         if current_balance < cost:
-            return HttpResponseBadRequest(f'Not enough balance. Current balance is {current_balance}.')
+            return HttpResponseBadRequest(json.dumps({
+                'message': 'insufficient fund'
+            }))
         else:
             attributes = get_equipment(equipment)
+            print(cost)
             result = web3_lib.createNFT(
-                receiver=bundle_address,
-                name=username,
-                attack=attributes['attack'],
-                defense=attributes['defense'],
-                magic_defense=attributes['magic_defense'],
-                power_hit=attributes['power_hit'],
+                receiver_address=bundle_address,
+                name=body['equipment_name'],
+                ATK=attributes['attack'],
+                DEF=attributes['defense'],
+                MAG=attributes['magic_defense'],
+                POW=attributes['power_hit'],
                 drop_time=attributes['drop_time'],
                 cost=cost,
                 gas=gas,
@@ -419,6 +417,7 @@ def query_equipment(request):
         for equip in e_list:
             if equip[0] != "blade":
                 return_list.append({
+                    'id': equip[9],
                     'name': equip[0],
                     'attack': equip[1],
                     'defense': equip[2],

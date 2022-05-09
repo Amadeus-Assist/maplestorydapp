@@ -177,7 +177,7 @@ function MonstersAttr() {
 	this.lanWoNiu.things["蓝色蜗牛壳"] = {type: 3, min: 1, max: 1, percent: 0.7};
 	this.lanWoNiu.things["红色药水"] = {type: 2, min: 1, max: 3, percent: 0.3};
 	this.lanWoNiu.things["蓝色药水"] = {type: 2, min: 1, max: 3, percent: 0.3};
-	this.lanWoNiu.things["刮胡刀"] = {type: 1, percent: 0.1};
+	this.lanWoNiu.things["刮胡刀"] = {type: 1, percent: 1};
 
 	this.moGuZai = {
 		speed: 3,

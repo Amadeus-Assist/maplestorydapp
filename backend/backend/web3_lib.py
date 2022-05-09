@@ -1,6 +1,6 @@
 from web3 import Web3
 import json
-import password
+from . import password
 
 with open("backend\\abi.json",
           "r") as file:
@@ -8,7 +8,7 @@ with open("backend\\abi.json",
 
 w3 = Web3(Web3.HTTPProvider("http://18.182.45.18:8765/"))
 operator_address = "0xD296cfEd720f30b48A6EF91EBad782E3042ffbA0"
-contract_address = "0x7afE6C2596A434AdB04802d103e6BCfe452864De"
+contract_address = "0xE5cc15DA563e9674E4CA8199465e50b1d4713595"
 receiver_address = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
 
 maple_contract = w3.eth.contract(address=contract_address, abi=abi)
@@ -16,7 +16,7 @@ maple_contract = w3.eth.contract(address=contract_address, abi=abi)
 
 # EquipMenu = ['Name:','ATK','DEF','MAG','POW','ToD','state']
 
-def createNFT(receiver_address, name, ATK, DEF, MAG, POW, drop_time, cost):
+def createNFT(receiver_address, name, ATK, DEF, MAG, POW, drop_time, cost, gas, gas_price):
     nonce = w3.eth.getTransactionCount(operator_address)
     tx_data = maple_contract.encodeABI(fn_name="createEquipmentNFT",
                                        args=[receiver_address, name, ATK, DEF, MAG, POW, drop_time, cost])
@@ -26,8 +26,8 @@ def createNFT(receiver_address, name, ATK, DEF, MAG, POW, drop_time, cost):
         'to': contract_address,
         'from': operator_address,
         'password': password.password,
-        'gas': 154833,
-        'gasPrice': 500000000,
+        'gas': gas,
+        'gasPrice': gas_price,
         'value': 0,
         'data': tx_data,
     })
@@ -63,13 +63,17 @@ def selfBalance(receiver_address):
 
 def selfNFT(receiver_address):
     flag = 0
-    for i in range(0, len(maple_contract.functions.equipmentOfOwner(receiver_address).call())):
+    myItemlist = []
+    OwnedList = maple_contract.functions.equipmentOfOwner(receiver_address).call()
+
+    for id in OwnedList:
         if flag == 0:
             print("Player's Item List:")
-            myItemlist = []
-        OwnedList = maple_contract.functions.equipmentOfOwner(receiver_address).call()
-        Weapon = maple_contract.functions.getEquipment(OwnedList[i]).call()
-        myItemlist = myItemlist + [Weapon]
+        Weapon = maple_contract.functions.getEquipment(id).call()
+        Weapon.append(id)
+        # print("Weapon is: ")
+        # print(Weapon)
+        myItemlist.append(Weapon)
         flag = 1
-    print(myItemlist)
+    # print(myItemlist)
     return myItemlist
