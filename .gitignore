@@ -132,3 +132,4 @@ smart_contract/artifacts
 smart_contract/cache
 
 **/password.py
+frontend/market/node_modules
