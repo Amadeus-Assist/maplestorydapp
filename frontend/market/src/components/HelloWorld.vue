@@ -1,49 +1,68 @@
 <template>
-  <div class="controller" v-show="!seemarket">
-    <h1 v-show="isConnected">Account: {{ account }}</h1>
-    <button v-show="!isConnected" @click="connect">Connect Ale</button>
-    <button v-show="isConnected" @click="approveMoney" ref="btnToggle">See All the Items In the Market</button>
-  </div>
+  <div>
+    
+      <h1 v-show="isConnected" class="account-info"><b>Account:</b> {{ account }}</h1>
+      <button v-show="!isConnected" @click="connect" class="btn btn-success">Connect Ale</button>
+      <button v-show="isConnected" @click="approveMoney" ref="btnToggle" class="btn btn-success">See All the Items In the Market</button>
 
-  <div class="market" v-show="seemarket">
-    <div class='list-group list-group-local all-on-market'>
-      This is the list of all onsell equipments.
-        <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item'
-           v-on:click='toggleActiveIndex(allonsell, idx)'
-           :class="{'list-group-item aria-current': idx == activeIndex && allonsell == activeList}">
-          {{ product }}
+    <div class="market" v-show="seemarket">
+        <div class='list-group list-group-local all-on-market'>
+          <b>This is the list of all onsell equipments.</b>
+          <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item '
+            v-on:click='toggleActiveIndex(allonsell, idx)'
+            :class="{'list-group-item aria-current': idx == activeIndex && allonsell == activeList}">
+            <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
+            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%  price: {{product.price._hex}}  seller: {{product.seller}} 
+            </p> 
+            <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
+            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%  price: {{product.price._hex}}  seller: {{product.seller}} 
+            </p> 
+          </a>
+        </div>
+        <div>
+        <div class='list-group list-group-local self-on'>
+          <b>This is the list of all of YOUR onsell equipments.</b>
+        <a v-for='(product, idx) in youronsell' :key="idx" class='list-group-item-local list-group-item'
+            v-on:click='toggleActiveIndex(youronsell, idx)'
+            :class="{'active': idx == activeIndex && youronsell == activeList}">
+            <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
+            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%    price: {{product.price._hex}}
+            </p> 
+            <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
+            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%    price: {{product.price._hex}}
+            </p> 
         </a>
-    </div>
+        </div>
+        
+        <div class='list-group list-group-local self-other'>
+        <b>This is the list of all of YOUR other equipments.</b>
+        <a v-for='(product, idx) in yourother' :key="idx" class='list-group-item-local list-group-item'
+          v-on:click='toggleActiveIndex(yourother, idx)'
+          :class="{'active': idx == activeIndex && yourother == activeList}" >
+          <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
+            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%
+          </p> 
+          <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
+            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%
+          </p> 
+          
+        </a>
+        </div>
 
-    <div class='list-group list-group-local self-on'>
-      This is the list of all of YOUR onsell equipments.
-      <a v-for='(product, idx) in youronsell' :key="idx" class='list-group-item-local list-group-item'
-         v-on:click='toggleActiveIndex(youronsell, idx)'
-         :class="{'active': idx == activeIndex && youronsell == activeList}">
-        {{ product }}
-      </a>
-    </div>
-
-    <div class='list-group list-group-local self-other'>
-      This is the list of all of YOUR other equipments.
-      <a v-for='(product, idx) in yourother' :key="idx" class='list-group-item-local list-group-item'
-         v-on:click='toggleActiveIndex(yourother, idx)'
-         :class="{'active': idx == activeIndex && yourother == activeList}">
-        {{ product }}
-      </a>
-    </div>
-
-    <div class="buttons">
-      <button @click="buyequipment">Buy</button>
-      <button @click="cancelsell">Cancel the Sell</button>
-      <input v-model="sellprice" placeholder="Your Price">
-      <button @click="sellequipment">Sell</button>
-    </div>
+        <div class="buttons">
+          <button @click="buyequipment" class="btn btn-success buy-btn">Buy</button>
+          <button @click="cancelsell" class="btn btn-success can-btn">Cancel the Sell</button>
+          <input v-model="sellprice" placeholder="Your Price">
+          <button @click="sellequipment" class="btn btn-success sell-btn">Sell</button>
+        </div>
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
-
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
 import services from "@/api";
 
 export default {
@@ -51,7 +70,7 @@ export default {
     return {
       account: "",
       isConnected: false,
-      seemarket: false,
+      // seemarket: false,
 
       activeIndex: null,
       activeList: null,
@@ -210,29 +229,36 @@ del {
   color: rgba(0, 0, 0, 0.3);
 }
 
+.account-info{
+  font-size:25px;
+}
+
 .market {
   width: 95vw;
-  height: 85vh;
+  height:85vh;
   padding: 2.5vw;
 }
 
 .all-on-market {
   width: 50%;
-  height: 100%;
+  height:100%;
   float: left;
+  overflow-y:scroll;
 }
 
 .self-on {
   width: 45%;
-  height: 40%;
+  height:35vh;
   float: right;
+  overflow-y:scroll;
 }
 
 .self-other {
   width: 45%;
-  height: 40%;
+  height:35vh;
   float: right;
   margin-top: 10px;
+  overflow-y:scroll;
 }
 
 .list-group-local {
@@ -244,6 +270,7 @@ del {
   float: right;
   display: block;
   transition: all .3s ease-in;
+
 }
 
 .list-group-item:hover {
@@ -255,10 +282,24 @@ del {
   color: white;
 }
 
+
 .buttons {
   width: 45%;
   float: right;
   margin-top: 10px;
+}
+
+.buy-btn{
+  margin-right:20px;
+}
+
+.can-btn{
+  margin-right:40px;
+  margin-left:20px;
+}
+
+.sell-btn{
+  margin-left:10px;
 }
 
 </style>
