@@ -541,8 +541,8 @@ function Backpack() {
             switch (this.open) {
                 //menu设计
                 case "装备":
-                    ctx.fillText("装备", this.select_point.x + 25, this.select_point.y + 18);
-                    ctx.fillText("丢弃", this.select_point.x + 25, this.select_point.y + 48);
+                    ctx.fillText("Equip", this.select_point.x + 25, this.select_point.y + 18);
+                    ctx.fillText("Discard", this.select_point.x + 25, this.select_point.y + 48);
                     break;
                 case "消耗":
                     ctx.fillText("设置", this.select_point.x + 25, this.select_point.y + 18);
