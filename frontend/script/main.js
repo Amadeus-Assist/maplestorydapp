@@ -657,3 +657,26 @@ window.start = function (gender) {
 // window.addEventListener('beforeunload', (event) => {
 //     event.returnValue = 'You have unfinished changes!';
 // });
+
+window.discardEquipment = async function(id) {
+    const provider = window["aleereum"]
+    const account = provider.account
+    // let Mcp = require("../mcp.js");
+    const options = {
+        host: "18.182.45.18",
+        port: "8765"
+    }
+    let mcp = new Mcp(options)
+    mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
+    let myContract = new mcp.Contract(abi, '0xcd55c2b7E1A4273876353DB9f780a56b6d139374')
+
+    const response = await myContract.methods.discardEquipment(id).sendToBlock({
+        from: account,
+        amount: "0"
+    });
+    console.log(response)
+
+    if (response.success) {
+        console.log("respons success!" + response)
+    }
+} 
