@@ -8,15 +8,25 @@
     <div class="market" v-show="seemarket">
         <div class='list-group list-group-local all-on-market'>
           <b>This is the list of all onsell equipments.</b>
-          <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item '
+          <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item ' 
             v-on:click='toggleActiveIndex(allonsell, idx)'
             :class="{'list-group-item aria-current': idx == activeIndex && allonsell == activeList}">
-            <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
-            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%  price: {{product.price._hex}}  seller: {{product.seller}} 
+            
+            <p v-show = "product[0] == '刮胡刀' ">
+            <img src = "../assets/guahudao.png">
+            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
+            <br> <b> seller:</b> {{product.seller}}
             </p> 
-            <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
-            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%  price: {{product.price._hex}}  seller: {{product.seller}} 
+            <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn<br> <b> seller:</b> {{product.seller}}</p>
+            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn <br> <b> seller:</b> {{product.seller}}</p>
+            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn <br> <b> seller:</b> {{product.seller}}</p>
+            
+            <p v-show = "product[0] == '黑唐衫'">
+            <img src = "../assets/heitangshan.png">
+            {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
+            <br> <b>seller:</b> {{product.seller}} 
             </p> 
+            <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn  <br> <b>seller:</b> {{product.seller}} </p> 
           </a>
         </div>
         <div>
@@ -25,12 +35,20 @@
         <a v-for='(product, idx) in youronsell' :key="idx" class='list-group-item-local list-group-item'
             v-on:click='toggleActiveIndex(youronsell, idx)'
             :class="{'active': idx == activeIndex && youronsell == activeList}">
-            <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
-            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%    price: {{product.price._hex}}
+            <p v-show = "product[0] == '刮胡刀'">
+            <img src = "../assets/guahudao.png">
+            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
             </p> 
-            <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
-            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%    price: {{product.price._hex}}
+            <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p>
+            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn</p>
+            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p>
+
+            <p v-show = "product[0] == '黑唐衫'">
+            <img src = "../assets/heitangshan.png">
+            {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
             </p> 
+
+            <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p> 
         </a>
         </div>
         
@@ -39,12 +57,19 @@
         <a v-for='(product, idx) in yourother' :key="idx" class='list-group-item-local list-group-item'
           v-on:click='toggleActiveIndex(yourother, idx)'
           :class="{'active': idx == activeIndex && yourother == activeList}" >
-          <p v-show = "product[0] == '刮胡刀' || product[0] == '凤凰刃' || product[0] == '双翼刃'|| product[0] == '枫叶刃' ">
-            {{product.id._hex}}  name: {{ product[0] }} attack: {{product.attack}} power hit: {{product.power_hit}}%
+          <p v-show = "product[0] == '刮胡刀'">
+          <img src = "../assets/guahudao.png">
+            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%
           </p> 
-          <p v-show = "product[0] == '黑唐衫' || product[0] == '青梦'">
-            {{product.id._hex}}  name: {{ product[0] }} defense: {{product.defense}} magic defense: {{product.magic_defense}}%
+          <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}% </p>
+            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  </p>
+            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}% </p>
+
+          <p v-show = "product[0] == '黑唐衫' ">
+          <img src = "../assets/heitangshan.png">
+            {{product.id._hex}}  <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%
           </p> 
+          <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%   </p> 
           
         </a>
         </div>
@@ -65,6 +90,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import services from "@/api";
 
+
 export default {
   data() {
     return {
@@ -78,7 +104,9 @@ export default {
       youronsell: [],
       yourother: [],
 
-      sellprice: ""
+      sellprice: "",
+
+      
     };
   },
   watch: {
@@ -103,7 +131,7 @@ export default {
         this.youronsell = res
       });
       services.getAllOnsellEquipment().then((res) => {
-        this.allonsell = res
+        this.allonsell = res 
       });
       services.getAllMyNotOnsellEquipment().then((res) => {
         this.yourother = res
@@ -178,7 +206,7 @@ export default {
           this.sellprice = ""
         })
       }
-    }
+    },
   },
 };
 </script>

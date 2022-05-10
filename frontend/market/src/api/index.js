@@ -103,7 +103,8 @@ export default {
         return allequips;
     },
     async SellEquipment(id, price) {
-        const approveAmount = new Big(price).times('1e16');
+        const approveAmount = new Big(price).times('1e15');
+
         const options = {
             host: "18.182.45.18",
             port: "8765"
