@@ -8,14 +8,14 @@ npm rum serve
 ```
 Then open 
 ```
-http://127.0.0.1:8080/index.html
+http://127.0.0.1:8080/
 ```
 to play the game.
 
 
 Debug:
 ```
-npm run watch
+npm run build
 ```
 to generate `main.js` in the `dist/` directory and it will watch the change of our `script/main.js`
 Then run 
@@ -24,6 +24,6 @@ npm rum serve
 ```
 Then open 
 ```
-http://127.0.0.1:8080/index.html
+http://127.0.0.1:8080/
 ```
 to play the game.
