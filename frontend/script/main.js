@@ -300,6 +300,7 @@ window.switchlogin = function (e_id, last_id) {
 window.start = function (gender) {
     var e = $("logout_btn")
     e.style.display = "block"
+    $("market_btn").style.display = "block"
     var provider = window["aleereum"]
 
     if (provider.isConnected) {
