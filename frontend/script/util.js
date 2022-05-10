@@ -659,6 +659,17 @@ function Backpack() {
             return;
         }
         if (this.select_point.select == 1) {
+            //TODO: when this.open == 装备, drop it on the blockchain
+            
+            if (this.open === "装备") {
+                console.log("begin discard equipment")
+                
+                var weapon = this.backpack[this.open][this.select_point.index]
+                console.log("equipment is ", weapon)
+                var id = weapon.id
+                console.log("id is ", id)
+                window.discardEquipment(id)
+            }
             this.backpack[this.open][this.select_point.index] = null;
 
             for (var i = 0; i < this.empty_list[this.open].length; i++) {
