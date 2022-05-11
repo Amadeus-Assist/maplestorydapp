@@ -47,11 +47,14 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Dekko, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: rgba(240,247,209,0.94);
+  /*margin-top: 60px;*/
+  background-color: rgba(28,20,35,0.94);
+  height: 100vh;
+  width: 100vw;
 }
 </style>

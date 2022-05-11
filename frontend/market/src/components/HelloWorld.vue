@@ -1,87 +1,126 @@
 <template>
   <div>
-    
-      <h1 v-show="isConnected" class="account-info"><b>Account:</b> {{ account }}</h1>
-      <button v-show="!isConnected" @click="connect" class="btn btn-success">Connect Ale</button>
-      <button v-show="isConnected" @click="approveMoney" ref="btnToggle" class="btn btn-success">See All the Items In the Market</button>
+    <div class="place-holder"></div>
+    <h1 v-show="isConnected" class="account-info"><b>Account:</b> {{ account }}</h1>
+    <button v-show="!isConnected" @click="connect" class="btn btn-success">Connect Ale</button>
+    <button v-show="isConnected" @click="approveMoney" ref="btnToggle" class="btn btn-success">See All the Items In
+      the Market
+    </button>
 
     <div class="market" v-show="seemarket">
-        <div class='list-group list-group-local all-on-market'>
-          <b>This is the list of all onsell equipments.</b>
-          <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item ' 
-            v-on:click='toggleActiveIndex(allonsell, idx)'
-            :class="{'list-group-item aria-current': idx == activeIndex && allonsell == activeList}">
-            
-            <p v-show = "product[0] == '刮胡刀' ">
-            <img src = "../assets/guahudao.png">
-            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
-            <br> <b> seller:</b> {{product.seller}}
-            </p> 
-            <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn<br> <b> seller:</b> {{product.seller}}</p>
-            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn <br> <b> seller:</b> {{product.seller}}</p>
-            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn <br> <b> seller:</b> {{product.seller}}</p>
-            
-            <p v-show = "product[0] == '黑唐衫'">
-            <img src = "../assets/heitangshan.png">
-            {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
-            <br> <b>seller:</b> {{product.seller}} 
-            </p> 
-            <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn  <br> <b>seller:</b> {{product.seller}} </p> 
-          </a>
-        </div>
-        <div>
+      <div class='list-group list-group-local all-on-market'>
+        <b>This is the list of all onsell equipments.</b>
+        <a v-for='(product, idx) in allonsell' :key="idx" class='list-group-item-local list-group-item '
+           v-on:click='toggleActiveIndex(allonsell, idx)'
+           :class="{'active': idx == activeIndex && allonsell == activeList}">
+
+          <p class="item-content" v-show="product[0] == '刮胡刀' ">
+            <img src="../assets/guahudao.png">
+            {{ product.id._hex }} <b>name:</b> {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b>
+            {{ product.power_hit }}% <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn
+            <br> <b> seller:</b> {{ product.seller }}
+          </p>
+          <p class="item-content" v-show="product[0] == '凤凰刃' "><img src="../assets/fenghuangren.png"> {{ product.id._hex }} <b>name:</b>
+            {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+            <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn<br> <b> seller:</b>
+            {{ product.seller }}</p>
+          <p class="item-content" v-show="product[0] == '枫叶刃' "><img src="../assets/fengyeren.png"> {{ product.id._hex }} <b>name:</b>
+            {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+            <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn <br> <b> seller:</b>
+            {{ product.seller }}</p>
+          <p class="item-content" v-show="product[0] == '双翼刃' "><img src="../assets/shuangyiren.png"> {{ product.id._hex }} <b>name:</b>
+            {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+            <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn <br> <b> seller:</b>
+            {{ product.seller }}</p>
+
+          <p class="item-content" v-show="product[0] == '黑唐衫'">
+            <img src="../assets/heitangshan.png">
+            {{ product.id._hex }} <b>name: </b> {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic
+            defense: </b>{{ product.magic_defense }}% <b>price:</b> {{ (parseInt(product.price._hex, 16)) / (1e18) }}
+            cnn
+            <br> <b>seller:</b> {{ product.seller }}
+          </p>
+          <p class="item-content" v-show="product[0] == '青梦'"><img src="../assets/qingmeng.png"> {{ product.id._hex }} <b>name: </b>
+            {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic defense: </b>{{ product.magic_defense }}%
+            <b>price:</b> {{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn <br> <b>seller:</b>
+            {{ product.seller }} </p>
+        </a>
+      </div>
+      <div>
         <div class='list-group list-group-local self-on'>
           <b>This is the list of all of YOUR onsell equipments.</b>
-        <a v-for='(product, idx) in youronsell' :key="idx" class='list-group-item-local list-group-item'
-            v-on:click='toggleActiveIndex(youronsell, idx)'
-            :class="{'active': idx == activeIndex && youronsell == activeList}">
-            <p v-show = "product[0] == '刮胡刀'">
-            <img src = "../assets/guahudao.png">
-            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
-            </p> 
-            <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p>
-            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn</p>
-            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  <b>price: </b>{{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p>
+          <a v-for='(product, idx) in youronsell' :key="idx" class='list-group-item-local list-group-item'
+             v-on:click='toggleActiveIndex(youronsell, idx)'
+             :class="{'active': idx == activeIndex && youronsell == activeList}">
+            <p class="item-content" v-show="product[0] == '刮胡刀'">
+              <img src="../assets/guahudao.png">
+              {{ product.id._hex }} <b>name:</b> {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power
+              hit:</b> {{ product.power_hit }}% <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn
+            </p>
+            <p class="item-content" v-show="product[0] == '凤凰刃' "><img src="../assets/fenghuangren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+              <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }}
+              cnn </p>
+            <p class="item-content" v-show="product[0] == '枫叶刃' "><img src="../assets/fengyeren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+              <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }}
+              cnn</p>
+            <p class="item-content" v-show="product[0] == '双翼刃' "><img src="../assets/shuangyiren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}%
+              <b>price: </b>{{ (parseInt(product.price._hex, 16)) / (1e18) }}
+              cnn </p>
 
-            <p v-show = "product[0] == '黑唐衫'">
-            <img src = "../assets/heitangshan.png">
-            {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn 
-            </p> 
+            <p class="item-content" v-show="product[0] == '黑唐衫'">
+              <img src="../assets/heitangshan.png">
+              {{ product.id._hex }} <b>name: </b> {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic
+              defense: </b>{{ product.magic_defense }}% <b>price:</b>
+              {{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn
+            </p>
 
-            <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%  <b>price:</b> {{(parseInt(product.price._hex, 16))/(1e18)}} cnn </p> 
-        </a>
+            <p class="item-content" v-show="product[0] == '青梦'"><img src="../assets/qingmeng.png"> {{ product.id._hex }} <b>name: </b>
+              {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic
+                defense: </b>{{ product.magic_defense }}% <b>price:</b>
+              {{ (parseInt(product.price._hex, 16)) / (1e18) }} cnn </p>
+          </a>
         </div>
-        
-        <div class='list-group list-group-local self-other'>
-        <b>This is the list of all of YOUR other equipments.</b>
-        <a v-for='(product, idx) in yourother' :key="idx" class='list-group-item-local list-group-item'
-          v-on:click='toggleActiveIndex(yourother, idx)'
-          :class="{'active': idx == activeIndex && yourother == activeList}" >
-          <p v-show = "product[0] == '刮胡刀'">
-          <img src = "../assets/guahudao.png">
-            {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%
-          </p> 
-          <p v-show = "product[0] == '凤凰刃' "> <img src = "../assets/fenghuangren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}% </p>
-            <p v-show = "product[0] == '枫叶刃' "> <img src = "../assets/fengyeren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}%  </p>
-            <p v-show = "product[0] == '双翼刃' "> <img src = "../assets/shuangyiren.png"> {{product.id._hex}}  <b>name:</b> {{ product[0] }} <b>attack:</b> {{product.attack}} <b>power hit:</b> {{product.power_hit}}% </p>
 
-          <p v-show = "product[0] == '黑唐衫' ">
-          <img src = "../assets/heitangshan.png">
-            {{product.id._hex}}  <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%
-          </p> 
-          <p v-show = "product[0] == '青梦'"><img src = "../assets/qingmeng.png"> {{product.id._hex}} <b>name: </b> {{ product[0] }} <b> defense: </b>{{product.defense}} <b>magic defense: </b>{{product.magic_defense}}%   </p> 
-          
-        </a>
+        <div class='list-group list-group-local self-other'>
+          <b>This is the list of all of YOUR other equipments.</b>
+          <a v-for='(product, idx) in yourother' :key="idx" class='list-group-item-local list-group-item'
+             v-on:click='toggleActiveIndex(yourother, idx)'
+             :class="{'active': idx == activeIndex && yourother == activeList}">
+            <p class="item-content" v-show="product[0] == '刮胡刀'">
+              <img src="../assets/guahudao.png">
+              {{ product.id._hex }} <b>name:</b> {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power
+              hit:</b> {{ product.power_hit }}%
+            </p>
+            <p class="item-content" v-show="product[0] == '凤凰刃' "><img src="../assets/fenghuangren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}% </p>
+            <p class="item-content" v-show="product[0] == '枫叶刃' "><img src="../assets/fengyeren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}% </p>
+            <p v-show="product[0] == '双翼刃' "><img src="../assets/shuangyiren.png"> {{ product.id._hex }} <b>name:</b>
+              {{ product[0] }} <b>attack:</b> {{ product.attack }} <b>power hit:</b> {{ product.power_hit }}% </p>
+
+            <p class="item-content" v-show="product[0] == '黑唐衫' ">
+              <img src="../assets/heitangshan.png">
+              {{ product.id._hex }} <b>name: </b> {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic
+              defense: </b>{{ product.magic_defense }}%
+            </p>
+            <p class="item-content" v-show="product[0] == '青梦'"><img src="../assets/qingmeng.png"> {{ product.id._hex }} <b>name: </b>
+              {{ product[0] }} <b> defense: </b>{{ product.defense }} <b>magic
+                defense: </b>{{ product.magic_defense }}% </p>
+
+          </a>
         </div>
 
         <div class="buttons">
           <button @click="buyequipment" class="btn btn-success buy-btn">Buy</button>
           <button @click="cancelsell" class="btn btn-success can-btn">Cancel the Sell</button>
-          <input v-model="sellprice" placeholder="Your Price">
+          <input class="price-input" v-model="sellprice" placeholder="Your Price in mCCN">
           <button @click="sellequipment" class="btn btn-success sell-btn">Sell</button>
         </div>
-        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -106,7 +145,7 @@ export default {
 
       sellprice: "",
 
-      
+
     };
   },
   watch: {
@@ -131,7 +170,7 @@ export default {
         this.youronsell = res
       });
       services.getAllOnsellEquipment().then((res) => {
-        this.allonsell = res 
+        this.allonsell = res
       });
       services.getAllMyNotOnsellEquipment().then((res) => {
         this.yourother = res
@@ -231,10 +270,16 @@ a {
   color: #42b983;
 }
 
-body {
-  background: #20262E;
-  padding: 20px;
-  font-family: Helvetica;
+.place-holder{
+  height: 5vh;
+}
+
+body, html {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  /*padding: 20px;*/
+  font-family: Dekko;
 }
 
 #app {
@@ -257,36 +302,36 @@ del {
   color: rgba(0, 0, 0, 0.3);
 }
 
-.account-info{
-  font-size:25px;
+.account-info {
+  font-size: 25px;
 }
 
 .market {
   width: 95vw;
-  height:85vh;
+  height: 80vh;
   padding: 2.5vw;
 }
 
 .all-on-market {
   width: 50%;
-  height:100%;
+  height: 100%;
   float: left;
-  overflow-y:scroll;
+  overflow-y: scroll;
 }
 
 .self-on {
   width: 45%;
-  height:35vh;
+  height: 35vh;
   float: right;
-  overflow-y:scroll;
+  overflow-y: scroll;
 }
 
 .self-other {
   width: 45%;
-  height:35vh;
+  height: 35vh;
   float: right;
   margin-top: 10px;
-  overflow-y:scroll;
+  overflow-y: scroll;
 }
 
 .list-group-local {
@@ -294,11 +339,20 @@ del {
   padding: 5px;
 }
 
+.item-content{
+  margin-bottom: 0;
+}
+
 .list-group-item-local {
   float: right;
   display: block;
   transition: all .3s ease-in;
-
+  background-color: rgba(239,248,255,0);
+  border-image: linear-gradient(to right, #8f41e9, rgba(10,24,247,0)) 1;
+  border-bottom: 4px solid;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
 }
 
 .list-group-item:hover {
@@ -306,28 +360,55 @@ del {
 }
 
 .list-group-item.active {
-  background: black;
-  color: white;
+  background: #eff8ff;
+  color: black;
 }
 
 
 .buttons {
-  width: 45%;
+  width: 100%;
   float: right;
   margin-top: 10px;
 }
 
-.buy-btn{
-  margin-right:20px;
+.buy-btn {
+  margin-right: 20px;
 }
 
-.can-btn{
-  margin-right:40px;
-  margin-left:20px;
+.can-btn {
+  margin-right: 40px;
+  margin-left: 20px;
 }
 
-.sell-btn{
-  margin-left:10px;
+.sell-btn {
+  margin-left: 10px;
+}
+
+.price-input{
+  background-color: rgba(26,46,87,0);
+  color: rgba(240,247,209,0.94);
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26,46,87,0.81);
 }
 
 </style>
