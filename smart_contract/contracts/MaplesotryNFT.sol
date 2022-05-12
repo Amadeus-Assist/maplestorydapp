@@ -227,7 +227,7 @@ contract MaplestoryDappNFT is ERC721 {
 
     function discardEquipment(uint256 _id) public {
         require(tokenIdToOnSell[_id].seller == address(0), "equipment on sell");
-        require(ownerOf(_id) == msg.sender, "only owner can cancel on-sell his equipment");
+        require(ownerOf(_id) == msg.sender, "only owner can discard his equipment");
 
         _safeTransfer(msg.sender, operatorAddress, _id, "");
         emit DiscardEquipment(_id, msg.sender);

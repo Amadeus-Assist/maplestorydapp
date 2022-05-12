@@ -57,7 +57,8 @@ def login(request):
             response_data = {
                 'message': 'ok',
                 'token': token,  # 存储token到dict
-                'character_info': character_info
+                'character_info': character_info,
+                'bundle_address': query_result['bundle_address']
             }
             print("login response: ", response_data)
             return JsonResponse(response_data, safe=False, status=200)

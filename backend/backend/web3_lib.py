@@ -8,8 +8,7 @@ with open("backend\\abi.json",
 
 w3 = Web3(Web3.HTTPProvider("http://18.182.45.18:8765/"))
 operator_address = "0xD296cfEd720f30b48A6EF91EBad782E3042ffbA0"
-contract_address = "0xcd55c2b7E1A4273876353DB9f780a56b6d139374"
-receiver_address = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
+contract_address = "0x0298FC08107DC7Ec5Be87F8223dfc4A3D0461aE8"
 
 maple_contract = w3.eth.contract(address=contract_address, abi=abi)
 

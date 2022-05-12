@@ -15,6 +15,7 @@ var oldbackpack = [];
 var level = 1;
 window.token = "";
 window.username = ""
+window.address = ""
 
 window.resource = new Resource();
 window.music_manager = new MusicManager();
@@ -68,6 +69,7 @@ window.onload = function () {
                 var oldcharacter = jsonResponse.character_info
                 console.log(oldcharacter)
                 window.token = jsonResponse.token
+                window.address = jsonResponse.bundle_address
                 oldhp = oldcharacter.hp
                 oldmp = oldcharacter.mp
                 oldexp = oldcharacter.exp
@@ -112,8 +114,7 @@ window.onload = function () {
         }
         let mcp = new Mcp(options)
         mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-        let myContract = new mcp.Contract(abi, '0xcd55c2b7E1A4273876353DB9f780a56b6d139374')
-        const receiver = "0x4135E35Bb807f8e7eD4daAD179Cb9c5f17f326bc"
+        let myContract = new mcp.Contract(abi, '0x0298FC08107DC7Ec5Be87F8223dfc4A3D0461aE8')
 
         var decimal = amount.toString().split('.')
         var count = 16
@@ -129,7 +130,7 @@ window.onload = function () {
 
         // console.log(approveAmount)
 
-        const response = await myContract.methods.depositMoney(receiver).sendToBlock({
+        const response = await myContract.methods.depositMoney(window.address).sendToBlock({
             from: account,
             amount: approveAmount
         });
@@ -668,7 +669,7 @@ window.discardEquipment = async function(id) {
     }
     let mcp = new Mcp(options)
     mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-    let myContract = new mcp.Contract(abi, '0xcd55c2b7E1A4273876353DB9f780a56b6d139374')
+    let myContract = new mcp.Contract(abi, '0x0298FC08107DC7Ec5Be87F8223dfc4A3D0461aE8')
 
     const response = await myContract.methods.discardEquipment(id).sendToBlock({
         from: account,
