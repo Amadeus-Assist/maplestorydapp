@@ -416,7 +416,7 @@ def query_equipment(request):
         print(e_list)
         return_list = []
         for equip in e_list:
-            if equip[0] != "blade":
+            if not equip[6]:
                 return_list.append({
                     'id': equip[9],
                     'name': equip[0],

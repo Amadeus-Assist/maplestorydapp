@@ -114,10 +114,10 @@ window.onload = function () {
         }
         let mcp = new Mcp(options)
         mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-        let myContract = new mcp.Contract(abi, '0x0298FC08107DC7Ec5Be87F8223dfc4A3D0461aE8')
+        let myContract = new mcp.Contract(abi, '0x22C593597fDF424b966D6684Ca96864624AC343C')
 
         var decimal = amount.toString().split('.')
-        var count = 16
+        var count = 15
         if (decimal.length > 1) {
             count -= decimal[1].length
         }
@@ -669,7 +669,7 @@ window.discardEquipment = async function(id) {
     }
     let mcp = new Mcp(options)
     mcp.Contract.setProvider('https//18.182.45.18:8765/', account)
-    let myContract = new mcp.Contract(abi, '0x0298FC08107DC7Ec5Be87F8223dfc4A3D0461aE8')
+    let myContract = new mcp.Contract(abi, '0x22C593597fDF424b966D6684Ca96864624AC343C')
 
     const response = await myContract.methods.discardEquipment(id).sendToBlock({
         from: account,
